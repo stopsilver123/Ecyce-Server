@@ -1,0 +1,43 @@
+package com.ecyce.karma.domain.address.entity;
+
+import com.ecyce.karma.domain.user.entity.User;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Address{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "addressId")
+    private Long addressId;
+
+    @Column(nullable = false)
+    private String address1; // 도시
+
+    @Column(nullable = false)
+    private String address2; // 구
+
+    @Column(nullable = false)
+    private String address3; // 건물
+    @Column(nullable = false)
+    private Long postalCode; //우편번호
+
+    @OneToOne
+    @JoinColumn(name = "userId" ,updatable = false, nullable = false)
+    private User user;
+
+    @Builder
+    public Address(User user , String address1 , String address2 , String address3 , Long postalCode){
+        this.user = user;
+        this.address1 = address1;
+        this.address2 = address2;
+        this.address3 = address3;
+        this.postalCode = postalCode;
+    }
+}

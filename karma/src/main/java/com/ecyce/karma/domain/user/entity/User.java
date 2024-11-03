@@ -49,13 +49,13 @@ public class User {
     List<Product> products = new ArrayList<>();
 
     @OneToMany(mappedBy = "sellerUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Orders> userAsSeller = new ArrayList<>();
+     List<Orders> userAsSeller = new ArrayList<>();
 
     @OneToMany(mappedBy = "buyerUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Orders> userAsBuyer = new ArrayList<>();
+     List<Orders> userAsBuyer = new ArrayList<>();
 
     @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Sales> sales = new ArrayList<>();
+     List<Sales> sales = new ArrayList<>();
 
     @Builder
     public  User(String nickname , String email , String profileImage , String phoneNumber , String bio){

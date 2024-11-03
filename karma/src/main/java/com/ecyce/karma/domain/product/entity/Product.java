@@ -1,11 +1,16 @@
 package com.ecyce.karma.domain.product.entity;
 
+import com.ecyce.karma.domain.order.entity.Orders;
+import com.ecyce.karma.domain.sales.entity.Sales;
 import com.ecyce.karma.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -39,6 +44,10 @@ public class Product {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ProductState productState;
+
+    @OneToMany(mappedBy = "product" , cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Orders> orders  = new ArrayList<>();
+
 
 
     @Builder

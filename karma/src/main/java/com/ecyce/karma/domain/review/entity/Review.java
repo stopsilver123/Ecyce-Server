@@ -19,7 +19,6 @@ public class Review extends BaseTimeEntity {
     @Column(name = "reviewId")
     private Long reviewId;
 
-
     @Column(nullable = false)
     private String content;
 
@@ -36,11 +35,11 @@ public class Review extends BaseTimeEntity {
     private Orders orders;
 
     @Builder
-    public Review (String content , Long rating , User user ){
+    public Review (String content , Long rating , User user , Orders orders ){
         this.content = content;
         this.rating = rating;
         this.user = user;
-
+        this.orders = orders;
     }
 
 }

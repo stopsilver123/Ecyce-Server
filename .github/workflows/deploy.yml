@@ -1,0 +1,87 @@
+name: CI/CD with Docker
+
+#deploy 브랜치에 push하면 workflows 실행
+on:
+  push:
+    branches: [ "deploy" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'zulu'
+
+
+      # repository secrets에 올린 application.yml을 빌드 시 생성
+      - name: Make application.yml
+        run: |
+          mkdir ./karma/src/main/resources
+          cd ./karma/src/main/resources
+          touch ./application.yml
+          echo "${{ secrets.APPLICATION }}" > ./application.yml
+      
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build with Gradle
+        run: |
+          cd ./karma
+          chmod +x ./gradlew
+          ./gradlew build -x test
+
+      #ID, PW를 이용해 Docker hub에 로그인
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      #Docker 이미지 빌드 후 푸시
+      - name: Docker build & push
+        uses: docker/build-push-action@v2
+        with:
+          #빌드 컨텍스트 지정 : 지정한 디렉토리 안에 Dockerfile이 있어야 함
+          context: ./karma
+          #빌드에 사용할 Dockerfile의 경로 지정
+          file: ./karma/Dockerfile
+          #빌드할 이미지의 플랫폼 지정
+          platforms: linux/arm64/v8
+          #빌드 후 이미지의 플랫폼 지정
+          push: true
+          #이미지 태그 지정
+          tags: ${{ secrets.DOCKER_REPO }}:latest
+
+      #SSH를 사용하여 EC2에 명령을 전달
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        with:
+          #원격 서버의 호스트 주소 지정
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          envs: GITHUB_SHA
+          #아래 명령들을 실행
+            #스크립트
+              #1. 원격 서버에서 실행 중인 모든 Docker 컨테이너를 강제로 중지하고 제거
+              #2. Docker 이미지 레지스트리에서 latest 태그의 이미지를 pull
+              #3. Docker 컨테이너를 백그라운드에서, 호스트 8080 포트로 들어오는 요청을 컨테이너 8080 포트로 전달해서 이미지를 실행
+                # -d : 백그라운드에서 컨테이너 실행되게 함, -p : 이미지 실행 포트 지정 [host port number:container port number]
+              #4. 사용하지 않는 이미지 정리
+          script: |
+            sudo docker rm -f $(sudo docker ps -qa)
+            sudo docker pull ${{ secrets.DOCKER_REPO }}:latest
+            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}:latest
+            sudo docker image prune -f

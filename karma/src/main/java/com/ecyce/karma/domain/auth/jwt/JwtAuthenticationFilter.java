@@ -1,6 +1,7 @@
 package com.ecyce.karma.domain.auth.jwt;
 
 import com.ecyce.karma.domain.auth.errorHandler.CustomJwtAuthenticationEntryPoint;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,9 +32,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final CustomJwtAuthenticationEntryPoint customJwtAuthenticationEntryPoint;
+
+    @PostConstruct
+    public void init() {
+        System.out.println("JwtAuthenticationFilter has been initialized.");
+    }
     // 필터 건너뛰는 api url (사용자 인증 미필요 api)
     private static final List<String> EXCLUDED_URLS = Arrays.asList(
-            "/api/oauth/kakao" // 로그인
+            "/login/oauth2/kakao", // 로그인
+            "/login/oauth2/**"
     );
 
     @Override
@@ -42,6 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         // URL이 제외된 경우 다음 필터로 넘어감
         if (isExcludedUrl(requestURI)) {
+            System.out.println("Request to " + requestURI + " is excluded from authentication.");
             filterChain.doFilter(request, response);
             return;
         }

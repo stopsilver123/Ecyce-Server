@@ -20,6 +20,7 @@ public class CustomJwtAuthenticationEntryPoint implements AuthenticationEntryPoi
     // ex) 로그인X 사용자가 접근할 때
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException  {
+        System.out.println("CustomJwtAuthenticationEntryPoint triggered for request: " + request.getRequestURI());
         setResponse(response, "Unauthorized", authException.getMessage());
     }
 

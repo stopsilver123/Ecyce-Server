@@ -56,6 +56,10 @@ public class KakaoApiClient {
             System.err.println("Error response body: " + e.getResponseBodyAsString());
             return null;
         }
+        catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
+            return null;
+        }
 
     }
 

@@ -7,6 +7,7 @@ import com.ecyce.karma.domain.review.entity.Review;
 import com.ecyce.karma.domain.user.entity.User;
 import com.ecyce.karma.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import jdk.jshell.Snippet.Status;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -75,8 +76,14 @@ public class Orders extends BaseTimeEntity {
         this.orderCount = orderCount; // 상품 개수
     }
 
-    // 정적 팩토리 메서드
     public static Orders createOrder(String request, User seller, User buyer, Product product, ProductOption productOption, Long orderCount) {
         return new Orders(request, seller, buyer, product, productOption, orderCount);
+    }
+
+    public void cancelOrder() {
+        if (orderState != OrderState.접수완료 && orderState != OrderState.제작대기) {
+            throw new IllegalStateException("현재 상태에서는 주문을 취소할 수 없습니다.");
+        }
+        this.orderState = OrderState.주문취소;
     }
 }

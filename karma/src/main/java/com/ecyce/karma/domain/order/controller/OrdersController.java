@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,5 +42,12 @@ public class OrdersController {
     public ResponseEntity<List<OrderReadResponseDto>> getAllOrders() {
         List<OrderReadResponseDto> orderList = ordersService.getAllOrders();
         return ResponseEntity.ok(orderList);
+    }
+
+    // 주문 취소
+    @PatchMapping("/{orderId}")
+    public ResponseEntity<String> cancelOrder(@PathVariable Long orderId, @RequestParam Long userId) {
+        ordersService.cancelOrder(orderId, userId);
+        return ResponseEntity.ok("주문이 성공적으로 취소되었습니다.");
     }
 }

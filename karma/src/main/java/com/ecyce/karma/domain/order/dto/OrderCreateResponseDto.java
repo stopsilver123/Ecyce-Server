@@ -15,6 +15,7 @@ public class OrderCreateResponseDto {
     private String orderStatus;
     private LocalDateTime createdAt;
     private String request;
+    private Long price;
 
     public static OrderCreateResponseDto from(Orders order) {
         return new OrderCreateResponseDto(
@@ -24,7 +25,9 @@ public class OrderCreateResponseDto {
                 order.getOrderStatus()
                      .name(),
                 order.getCreatedAt(),
-                order.getRequest()
+                order.getRequest(),
+                order.getPay()
+                     .getPayAmount()
         );
     }
 }

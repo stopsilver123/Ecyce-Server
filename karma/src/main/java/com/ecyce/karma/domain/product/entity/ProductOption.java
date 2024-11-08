@@ -25,16 +25,17 @@ public class ProductOption {
     @Column(nullable = false)
     private String title;
 
-    private String detail;
+    @Column(nullable = false)
+    private Long subPrice; // 옵션 추가 금액
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productId", nullable = false)
     private Product product;
 
     @Builder
-    public ProductOption(String title, String detail, Product product) {
+    public ProductOption(String title, Product product, Long price) {
         this.title = title;
-        this.detail = detail;
+        this.subPrice = price;
         this.product = product;
     }
 }

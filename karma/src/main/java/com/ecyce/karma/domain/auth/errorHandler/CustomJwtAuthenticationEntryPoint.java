@@ -3,6 +3,7 @@ package com.ecyce.karma.domain.auth.errorHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -14,13 +15,14 @@ import java.util.Map;
 /* 인증되지 않은 사용자가 보호된 리소스에 접근하려할 때 에러 핸들러 */
 // HTTP 응답 상태 코드 401(Unauthorized)
 @Component
+@Slf4j
 public class CustomJwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     // 1번 commence 메소드 : 표준 인증 예외 처리 - Spring Security의 표준 인증 예외를 처리
     // ex) 로그인X 사용자가 접근할 때
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException  {
-        System.out.println("CustomJwtAuthenticationEntryPoint triggered for request: " + request.getRequestURI());
+        log.info("CustomJwtAuthenticationEntryPoint triggered for request: {} " , request.getRequestURI());
         setResponse(response, "Unauthorized", authException.getMessage());
     }
 

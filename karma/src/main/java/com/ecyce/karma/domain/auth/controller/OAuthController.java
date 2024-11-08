@@ -5,12 +5,14 @@ import com.ecyce.karma.domain.auth.jwt.JwtTokens;
 import com.ecyce.karma.domain.auth.service.OAuthLoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/login/oauth")
+@RequestMapping("/login/oauth2")
+@Slf4j
 public class OAuthController {
 
     private final OAuthLoginService oAuthLoginService;
@@ -20,8 +22,7 @@ public class OAuthController {
     @ResponseBody
     @GetMapping("/kakao")
     public ResponseEntity<JwtTokens> kakaoCallback(@RequestParam(name="code") String code) {
-        System.out.println("kakaoCallback 메서드 호출됨");
-        System.out.println("code : " + code);
+       log.info("kakaoCallback 메서드 호출됨");
         return ResponseEntity.ok(oAuthLoginService.login(code));
     }
 

@@ -29,7 +29,7 @@ public class SecurityConfig {
     // 인증이 필요없는 URL 패턴 목록을 정의
     private static final String[] AUTH_WHITELIST = {
             "/login/oauth2/kakao", // 로그인
-            "/login/oauth2/**"
+            "/login/**",
     };
 
     // cors 설정

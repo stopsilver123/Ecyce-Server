@@ -20,7 +20,7 @@ public class OrderReadResponseDto {
     // 사용자 정보
     private String name;
     private String phone;
-//    private String address;
+    private String address;
     // 결제 정보
     private Long price;
 
@@ -35,7 +35,7 @@ public class OrderReadResponseDto {
                 order.getCreatedAt(),
                 order.getBuyerUser().getNickname(),
                 order.getBuyerUser().getPhoneNumber(),
-//                order.getBuyerUser().getAddress()
+                order.getBuyerUser().getAddress().toString(),
                 order.getPay().getPayAmount()
         );
     }

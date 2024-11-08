@@ -40,4 +40,10 @@ public class Address{
         this.address3 = address3;
         this.postalCode = postalCode;
     }
+
+    // 주소 형식 포맷팅
+    @Override
+    public String toString() {
+        return String.format("[%d] %s %s %s", postalCode, address1, address2, address3);
+    }
 }

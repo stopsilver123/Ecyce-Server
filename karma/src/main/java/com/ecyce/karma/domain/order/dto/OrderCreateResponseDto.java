@@ -11,10 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderCreateResponseDto {
     private Long orderId;
-    private Long productId;
-    private Long sellerId;
-    private Long buyerId;
-    private Long productOptionId;
     private String orderState;
     private String orderStatus;
     private LocalDateTime createdAt;
@@ -23,14 +19,6 @@ public class OrderCreateResponseDto {
     public static OrderCreateResponseDto from(Orders order) {
         return new OrderCreateResponseDto(
                 order.getOrderId(),
-                order.getProduct()
-                     .getProductId(),
-                order.getSellerUser()
-                     .getUserId(),
-                order.getBuyerUser()
-                     .getUserId(),
-                order.getProductOption()
-                     .getId(),
                 order.getOrderState()
                      .name(),
                 order.getOrderStatus()

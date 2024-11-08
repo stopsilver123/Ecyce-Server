@@ -1,5 +1,6 @@
 package com.ecyce.karma.domain.user.entity;
 
+import com.ecyce.karma.domain.address.entity.Address;
 import com.ecyce.karma.domain.bookmark.entity.Bookmark;
 import com.ecyce.karma.domain.notice.entity.Notice;
 import com.ecyce.karma.domain.order.entity.Orders;
@@ -56,6 +57,9 @@ public class User {
 
     @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
      List<Sales> sales = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Address address;
 
     @Builder
     public  User(String nickname , String email , String profileImage , String phoneNumber , String bio){

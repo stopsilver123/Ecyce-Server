@@ -48,6 +48,8 @@ public class Product {
     @OneToMany(mappedBy = "product" , cascade = CascadeType.ALL, orphanRemoval = true)
     List<Orders> orders  = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductOption> options = new ArrayList<>();
 
 
     @Builder

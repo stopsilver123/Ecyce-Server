@@ -2,6 +2,7 @@ package com.ecyce.karma.domain.order.entity;
 
 import com.ecyce.karma.domain.pay.entity.Pay;
 import com.ecyce.karma.domain.product.entity.Product;
+import com.ecyce.karma.domain.product.entity.ProductOption;
 import com.ecyce.karma.domain.review.entity.Review;
 import com.ecyce.karma.domain.user.entity.User;
 import com.ecyce.karma.global.entity.BaseTimeEntity;
@@ -31,10 +32,10 @@ public class Orders extends BaseTimeEntity {
     private OrderState orderState;
 
     @Column(nullable = false)
-    private String orderOption;
+    private Long orderCount;
 
-    @Column(nullable = false)
-    private String invoiceNumber;
+    @Column
+    private String invoiceNumber; // 송장번호
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -58,16 +59,20 @@ public class Orders extends BaseTimeEntity {
     @OneToOne(mappedBy = "orders" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Review review;
 
+    @OneToOne
+    @JoinColumn(name = "productOptionId", nullable = false)
+    private ProductOption productOption;
+
     @Builder
-    public Orders(String request , OrderState orderState , String orderOption , String invoiceNumber , OrderStatus orderStatus , User sellerUser , User buyerUser , Product product){
-        this.request = request;
-        this.orderState = orderState;
-        this.orderOption = orderOption;
-        this.invoiceNumber = invoiceNumber;
-        this.orderStatus = orderStatus;
-        this.sellerUser = sellerUser;
-        this.buyerUser = buyerUser;
-        this.product = product;
+    public Orders(String request , String orderOption , User sellerUser , User buyerUser , Product product, ProductOption productOption, Long orderCount){
+        this.request = request; // 유저 요구사항
+        this.orderState = OrderState.접수완료; // 주문 진행 과정
+        this.orderStatus = OrderStatus.수락대기; // 주문 대기, 승인, 거절
+        this.sellerUser = sellerUser; // 판매자
+        this.buyerUser = buyerUser; // 구매자
+        this.product = product; // 구매할 상품
+        this.productOption = productOption; // 상품 옵션
+        this.orderCount = orderCount; // 상품 개수
     }
 
 

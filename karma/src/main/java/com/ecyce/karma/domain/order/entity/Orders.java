@@ -63,8 +63,8 @@ public class Orders extends BaseTimeEntity {
     @JoinColumn(name = "productOptionId", nullable = false)
     private ProductOption productOption;
 
-    @Builder
-    public Orders(String request , String orderOption , User sellerUser , User buyerUser , Product product, ProductOption productOption, Long orderCount){
+
+    public Orders(String request , User sellerUser , User buyerUser , Product product, ProductOption productOption, Long orderCount){
         this.request = request; // 유저 요구사항
         this.orderState = OrderState.접수완료; // 주문 진행 과정
         this.orderStatus = OrderStatus.수락대기; // 주문 대기, 승인, 거절
@@ -75,5 +75,8 @@ public class Orders extends BaseTimeEntity {
         this.orderCount = orderCount; // 상품 개수
     }
 
-
+    // 정적 팩토리 메서드
+    public static Orders createOrder(String request, User seller, User buyer, Product product, ProductOption productOption, Long orderCount) {
+        return new Orders(request, seller, buyer, product, productOption, orderCount);
+    }
 }

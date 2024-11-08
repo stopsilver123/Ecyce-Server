@@ -2,6 +2,7 @@ package com.ecyce.karma.domain.order.service;
 
 import com.ecyce.karma.domain.order.dto.OrderCreateRequestDto;
 import com.ecyce.karma.domain.order.dto.OrderCreateResponseDto;
+import com.ecyce.karma.domain.order.dto.OrderReadResponseDto;
 import com.ecyce.karma.domain.order.entity.Orders;
 import com.ecyce.karma.domain.order.repository.OrdersRepository;
 import com.ecyce.karma.domain.product.entity.Product;
@@ -10,6 +11,8 @@ import com.ecyce.karma.domain.product.repository.ProductOptionRepository;
 import com.ecyce.karma.domain.product.repository.ProductRepository;
 import com.ecyce.karma.domain.user.entity.User;
 import com.ecyce.karma.domain.user.repository.UserRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,5 +44,20 @@ public class OrdersService {
         Orders savedOrder = orderRepository.save(order);
 
         return OrderCreateResponseDto.from(savedOrder);
+    }
+
+    // 주문 단건 조회
+    public OrderReadResponseDto getOrderById(Long orderId) {
+        Orders order = orderRepository.findById(orderId)
+                                      .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
+        return OrderReadResponseDto.from(order);
+    }
+
+    // 주문 전체 조회
+    public List<OrderReadResponseDto> getAllOrders() {
+        List<Orders> orders = orderRepository.findAll();
+        return orders.stream()
+                     .map(OrderReadResponseDto::from)
+                     .collect(Collectors.toList());
     }
 }

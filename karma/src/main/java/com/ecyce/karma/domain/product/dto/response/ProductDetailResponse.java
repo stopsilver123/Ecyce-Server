@@ -1,7 +1,6 @@
 package com.ecyce.karma.domain.product.dto.response;
 
 import com.ecyce.karma.domain.product.entity.Product;
-import com.ecyce.karma.domain.product.entity.ProductOption;
 import com.ecyce.karma.domain.product.entity.ProductState;
 
 import java.util.List;

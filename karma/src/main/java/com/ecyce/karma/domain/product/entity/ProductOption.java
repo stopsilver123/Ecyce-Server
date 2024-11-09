@@ -20,22 +20,24 @@ public class ProductOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "productOptionId")
-    private Long id;
+    private Long optionId;
 
     @Column(nullable = false)
-    private String title;
+    private String optionName;
 
     @Column(nullable = false)
-    private Long subPrice; // 옵션 추가 금액
+    private int optionPrice; // 옵션 추가 금액
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productId", nullable = false)
     private Product product;
 
     @Builder
-    public ProductOption(String title, Product product, Long price) {
-        this.title = title;
-        this.subPrice = price;
+    public ProductOption(String optionName, Product product, int optionPrice) {
+        this.optionName = optionName;
+        this.optionPrice = optionPrice;
         this.product = product;
     }
+
+
 }

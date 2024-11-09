@@ -84,7 +84,7 @@ public class Orders extends BaseTimeEntity {
     }
 
     public static Orders createOrder(String request, User seller, User buyer, Product product, ProductOption productOption, Long orderCount) {
-        Long payAmount = (product.getPrice() + productOption.getSubPrice()) * orderCount; // 상품 가격 계산
+        Long payAmount = (product.getPrice() + productOption.getOptionPrice()) * orderCount; // 상품 가격 계산
         return new Orders(request, seller, buyer, product, productOption, orderCount, payAmount);
     }
 

@@ -28,7 +28,7 @@ public class OrderReadResponseDto {
     public static OrderReadResponseDto from(Orders order) {
         return new OrderReadResponseDto(
                 order.getOrderId(),
-                order.getProductOption().getTitle(),
+                order.getProductOption().getOptionName(),
                 order.getOrderState().name(),
                 order.getOrderStatus().name(),
                 order.getRequest(),

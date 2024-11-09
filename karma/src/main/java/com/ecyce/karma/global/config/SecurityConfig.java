@@ -29,7 +29,9 @@ public class SecurityConfig {
     // 인증이 필요없는 URL 패턴 목록을 정의
     private static final String[] AUTH_WHITELIST = {
             "/login/oauth2/kakao", // 로그인
-            "/login/**",
+            "/product/{productId}", // 상품 상세 조회
+            "/product", // 전체 상품 조회
+            "/product/categorycode/*" // 카테고리별 조회
     };
 
     // cors 설정

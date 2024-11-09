@@ -30,16 +30,16 @@ public class Product {
     private String productName;
 
     @Column(nullable = false)
-    private Long price;
+    private int price;
 
     @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)
-    private Long duration;
+    private int duration;
 
-    @Column(nullable = false)
-    private Long rating;
+    @Column
+    private Integer rating;  // 점수는 아무도 리뷰를 쓰지 않은 경우 , 없을 수 있음
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -53,7 +53,7 @@ public class Product {
 
 
     @Builder
-    public Product(User user , String productName , Long price , String content , Long duration , Long rating , ProductState productState){
+    public Product(User user , String productName , int price , String content , int duration , int rating , ProductState productState){
         this.user = user;
         this.productName = productName;
         this.price = price;
@@ -62,5 +62,9 @@ public class Product {
         this.rating = rating;
         this.productState = productState;
     }
+
+
+
+
 
 }

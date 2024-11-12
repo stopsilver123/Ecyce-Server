@@ -1,6 +1,7 @@
 package com.ecyce.karma.domain.product.service;
 
 import com.ecyce.karma.domain.product.dto.request.OptionRequestDto;
+import com.ecyce.karma.domain.product.dto.response.OptionResponseDto;
 import com.ecyce.karma.domain.product.dto.response.ProductDetailResponse;
 import com.ecyce.karma.domain.product.dto.request.ProductRequestDto;
 import com.ecyce.karma.domain.product.entity.Product;
@@ -14,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -44,6 +48,11 @@ public class ProductService {
             }
         }
 
-        return ProductDetailResponse.from(product);
+        List<ProductOption> productOptions = productOptionRepository.findByProductId(product.getProductId());
+        List<OptionResponseDto> optionResponseDtos = productOptions.stream()
+                .map(productOption -> OptionResponseDto.from(productOption))
+                .collect(Collectors.toList());
+
+        return ProductDetailResponse.of(product , optionResponseDtos);
     }
 }

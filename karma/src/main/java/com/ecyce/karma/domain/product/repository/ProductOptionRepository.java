@@ -7,10 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 @Repository
 public interface ProductOptionRepository extends JpaRepository<ProductOption, Long> {
 
-    @Query("SELECT o FROM ProductOption o JOIN FETCH o.product WHERE o.product = :product")
-    ProductOption findByProductId(@Param("product") Product product);
+    @Query("select o from ProductOption o where o.product.productId =:productId")
+    List<ProductOption> findByProductId(@Param("productId") Long productId);
 }

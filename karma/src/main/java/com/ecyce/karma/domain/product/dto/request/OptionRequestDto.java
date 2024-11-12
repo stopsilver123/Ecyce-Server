@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 public class OptionRequestDto {
 
     private String optionName;
-    private int optionPrice;
+    private Integer optionPrice;
 
-    public OptionRequestDto(String optionName , int optionPrice){
+    public OptionRequestDto(String optionName , Integer optionPrice){
         this.optionName = optionName;
         this.optionPrice = optionPrice;
     }

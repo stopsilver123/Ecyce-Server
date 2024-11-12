@@ -26,7 +26,7 @@ public class ProductOption {
     private String optionName;
 
     @Column(nullable = false)
-    private int optionPrice; // 옵션 추가 금액
+    private Integer optionPrice; // 옵션 추가 금액
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productId", nullable = false)

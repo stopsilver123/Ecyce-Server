@@ -44,9 +44,6 @@ public class ProductService {
             }
         }
 
-        // 영속성 컨텍스트 안에 있어서 select 쿼리가 안나가는 것 같은데 왜 product만 온전히 조회가 되는지 모르겟네...
-        Product newProduct = productRepository.findByIdWithOptions(product.getProductId());
-
-        return ProductDetailResponse.from(newProduct);
+        return ProductDetailResponse.from(product);
     }
 }

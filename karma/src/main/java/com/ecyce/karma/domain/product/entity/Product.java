@@ -44,6 +44,20 @@ public class Product {
     @Column(nullable = false)
     private ProductState productState;
 
+    @Column
+    private int deliveryFee; // 배송비
+
+    @Column
+    private String materialInfo; // 소재의 정보
+
+    @Column
+    private String materialExample; // 소재 예시 사진
+
+    @Column
+    private String buyerNotice; // 구매자 안내사항
+
+
+
     @OneToMany(mappedBy = "product" , cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Orders> orders  = new ArrayList<>();
 
@@ -52,7 +66,8 @@ public class Product {
 
 
     @Builder
-    public Product(User user , String productName , int price , String content , int duration , int rating , ProductState productState ){
+    public Product(User user , String productName , int price , String content , int duration , int rating , ProductState productState,
+    int deliveryFee , String materialInfo , String materialExample , String buyerNotice){
         this.user = user;
         this.productName = productName;
         this.price = price;
@@ -60,6 +75,10 @@ public class Product {
         this.duration = duration;
         this.rating = rating;
         this.productState = productState;
+        this.deliveryFee = deliveryFee;
+        this.materialInfo = materialInfo;
+        this.materialExample = materialExample;
+        this.buyerNotice = buyerNotice;
     }
 
 

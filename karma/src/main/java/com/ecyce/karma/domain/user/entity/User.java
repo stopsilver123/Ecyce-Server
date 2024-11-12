@@ -25,6 +25,9 @@ public class User {
     @Column(name = "userId")
     private Long userId;
 
+    @Column(length = 20)
+    private String name;
+
     @Column(length = 20 , unique = true) //닉네임 중복 불가
     private String nickname;
 

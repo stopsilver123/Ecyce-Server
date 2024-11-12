@@ -56,7 +56,7 @@ public class OAuthLoginService {
         String nickname;
         do {
             randomNumber = (int)(Math.random() * 100000);
-            nickname = "이끼끼" + randomNumber ;
+            nickname = "이끼끼 " + randomNumber ;
         } while (userRepository.findByNickname(nickname).isPresent());
         return nickname;
     }

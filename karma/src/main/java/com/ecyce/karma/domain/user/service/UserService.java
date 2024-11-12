@@ -32,9 +32,9 @@ public class UserService {
     public ArtistInfoResponse getArtistInfo(Long userId) {
 
         User user = userRepository.findByUserId(userId);
-        calAverageRating(userId);
+        float averageRating = calAverageRating(userId);
 
-        return ArtistInfoResponse.from(user , userId);
+        return ArtistInfoResponse.from(user , averageRating);
     }
 
     /* 작가의 작품 평균 리뷰 수 계산 */
@@ -54,9 +54,9 @@ public class UserService {
                 count++;
             }
         }
-
+        
         // 계산
-        float averageRating = (float)sum / (float)count;
+        float averageRating = count > 0 ? (float) sum / count : 0.0f;
 
         return averageRating;
     }

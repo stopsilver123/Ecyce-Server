@@ -6,9 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ProductRepository extends JpaRepository<Product , Long> {
 
-    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.options WHERE p.productId = :productId")
-    Product findByIdWithOptions(@Param("productId") Long productId);
+    /* 사용자 id로 제품 리스트 반환*/
+    @Query("select p from Product  p where p.user.userId =:userId")
+    List<Product> findByUserId(@Param("userId") Long userId);
 }

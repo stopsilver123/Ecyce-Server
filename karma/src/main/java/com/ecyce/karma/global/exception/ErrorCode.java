@@ -15,8 +15,14 @@ public enum ErrorCode {
     FAIL_AUTHORIZATION(HttpStatus.FORBIDDEN, "권한이 없는 요청입니다."), // 권한 없는 요청
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL SERVER ERROR"),// 예상치 못한 에러
 
+    // User
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원이 존재하지 않습니다."),
+
     // product
-    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND , "해당하는 제품을 찾을 수 없습니다.");
+    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND , "해당하는 제품을 찾을 수 없습니다."),
+
+    // bookmark
+    BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "북마크가 존재하지 않습니다. 북마크를 등록한 후 취소할 수 있습니다.");
 
     private final HttpStatus status;
     private final String message;

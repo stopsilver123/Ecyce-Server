@@ -4,7 +4,6 @@ import com.ecyce.karma.domain.product.entity.Product;
 import com.ecyce.karma.domain.product.entity.ProductState;
 import com.ecyce.karma.domain.user.entity.User;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -55,8 +54,4 @@ public class ProductRequestDto {
                 .productState(ProductState.ON_SALE) // 처음에는 판매중 상태
                 .build();
    }
-
-
-
-
 }

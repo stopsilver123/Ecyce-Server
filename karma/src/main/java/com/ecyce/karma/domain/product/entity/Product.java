@@ -1,5 +1,6 @@
 package com.ecyce.karma.domain.product.entity;
 
+import com.ecyce.karma.domain.bookmark.entity.Bookmark;
 import com.ecyce.karma.domain.order.entity.Orders;
 import com.ecyce.karma.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -64,6 +65,8 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductOption> options = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bookmark> bookmarkList = new ArrayList<>();
 
     @Builder
     public Product(User user , String productName , int price , String content , int duration , int rating , ProductState productState,

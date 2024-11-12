@@ -1,8 +1,10 @@
 package com.ecyce.karma.domain.product.dto.response;
 
 import com.ecyce.karma.domain.product.entity.Product;
+import com.ecyce.karma.domain.product.entity.ProductOption;
 import com.ecyce.karma.domain.product.entity.ProductState;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,23 +18,42 @@ public record ProductDetailResponse(
         Integer rating, // 평점
         ProductState productState, // 제품 공개 여부
 
-        List<OptionResponseDto> options
+         List<OptionResponseDto> options
 
 ) {
-     public static ProductDetailResponse from(Product product){
-         return new ProductDetailResponse(
-                 product.getProductId(),
-                 product.getUser().getUserId(),
-                 product.getProductName(),
-                 product.getPrice(),
-                 product.getContent(),
-                 product.getDuration(),
-                 product.getRating(),
-                 product.getProductState(),
-                 product.getOptions().stream()
-                         .map(OptionResponseDto :: from )
-                         .collect(Collectors.toList())
-         );
-     }
+    public static ProductDetailResponse from(Product product) {
+        return new ProductDetailResponse(
+                product.getProductId(),
+                product.getUser().getUserId(),
+                product.getProductName(),
+                product.getPrice(),
+                product.getContent(),
+                product.getDuration(),
+                product.getRating(),
+                product.getProductState(),
+                product.getOptions() != null
+                        ? product.getOptions().stream()
+                        .map(OptionResponseDto::from)
+                        .collect(Collectors.toList())
+                        : new ArrayList<>()
+        );
+    }
 
+    public static ProductDetailResponse of(Product product , ProductOption productOption) {
+        return new ProductDetailResponse(
+                product.getProductId(),
+                product.getUser().getUserId(),
+                product.getProductName(),
+                product.getPrice(),
+                product.getContent(),
+                product.getDuration(),
+                product.getRating(),
+                product.getProductState(),
+                productOption != null
+                        ? product.getOptions().stream()
+                        .map(OptionResponseDto::from)
+                        .collect(Collectors.toList())
+                        : new ArrayList<>()
+        );
+    }
 }

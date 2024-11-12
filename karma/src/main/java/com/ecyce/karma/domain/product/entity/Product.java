@@ -1,7 +1,6 @@
 package com.ecyce.karma.domain.product.entity;
 
 import com.ecyce.karma.domain.order.entity.Orders;
-import com.ecyce.karma.domain.sales.entity.Sales;
 import com.ecyce.karma.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -46,14 +45,14 @@ public class Product {
     private ProductState productState;
 
     @OneToMany(mappedBy = "product" , cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Orders> orders  = new ArrayList<>();
+    private List<Orders> orders  = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductOption> options = new ArrayList<>();
 
 
     @Builder
-    public Product(User user , String productName , int price , String content , int duration , int rating , ProductState productState){
+    public Product(User user , String productName , int price , String content , int duration , int rating , ProductState productState ){
         this.user = user;
         this.productName = productName;
         this.price = price;

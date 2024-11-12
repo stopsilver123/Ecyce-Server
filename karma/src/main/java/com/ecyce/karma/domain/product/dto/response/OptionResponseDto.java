@@ -1,8 +1,6 @@
 package com.ecyce.karma.domain.product.dto.response;
 
-import com.ecyce.karma.domain.product.dto.request.OptionRequestDto;
 import com.ecyce.karma.domain.product.entity.ProductOption;
-import org.springframework.security.access.method.P;
 
 public record OptionResponseDto(
         Long optionId,

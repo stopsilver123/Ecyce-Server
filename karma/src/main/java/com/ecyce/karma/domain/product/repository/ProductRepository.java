@@ -14,4 +14,6 @@ public interface ProductRepository extends JpaRepository<Product , Long> {
     /* 사용자 id로 제품 리스트 반환*/
     @Query("select p from Product  p where p.user.userId =:userId")
     List<Product> findByUserId(@Param("userId") Long userId);
+
+
 }

@@ -1,16 +1,14 @@
 package com.ecyce.karma.domain.product.dto.response;
 
-import com.ecyce.karma.domain.product.dto.request.OptionRequestDto;
 import com.ecyce.karma.domain.product.entity.ProductOption;
-import org.springframework.security.access.method.P;
 
-public record OptionResponseDto(
+public record OptionResponse(
         Long optionId,
         String optionName,
         int optionPrice
 ) {
-    public  static OptionResponseDto from(ProductOption productOption){
-        return new OptionResponseDto(
+    public  static OptionResponse from(ProductOption productOption){
+        return new OptionResponse(
                 productOption.getOptionId(),
                 productOption.getOptionName(),
                 productOption.getOptionPrice()

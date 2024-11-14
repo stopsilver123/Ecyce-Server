@@ -5,7 +5,6 @@ import com.ecyce.karma.domain.bookmark.entity.Bookmark;
 import com.ecyce.karma.domain.notice.entity.Notice;
 import com.ecyce.karma.domain.order.entity.Orders;
 import com.ecyce.karma.domain.product.entity.Product;
-import com.ecyce.karma.domain.sales.entity.Sales;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -60,9 +59,6 @@ public class User {
 
     @OneToMany(mappedBy = "buyerUser", cascade = CascadeType.ALL, orphanRemoval = true)
      List<Orders> userAsBuyer = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
-     List<Sales> sales = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Address address;

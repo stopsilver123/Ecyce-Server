@@ -23,7 +23,7 @@ public class ChatRoomController {
     /* 채팅방 생성 */
     @PostMapping("/room")
     public ResponseEntity<ChatRoomResponseDto> createRoom(@AuthUser User creator, @RequestBody ChatRoomRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(chatRoomService.createChatRoom(creator, requestDto.getOtherUserName(), requestDto.isOtherUserBuyer()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(chatRoomService.createChatRoom(creator, requestDto.getOtherUserName(), requestDto.getIsOtherUserBuyer()));
     }
 
     /* 전체 채팅 목록 조회 */

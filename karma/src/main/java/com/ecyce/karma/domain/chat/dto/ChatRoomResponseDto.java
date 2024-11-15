@@ -11,13 +11,15 @@ public class ChatRoomResponseDto {
     private String name;
     private String buyer;
     private String seller;
+    private boolean isNew;
 
-    public static ChatRoomResponseDto from(ChatRoom chatRoom) {
+    public static ChatRoomResponseDto from(ChatRoom chatRoom, boolean isNew) {
         return new ChatRoomResponseDto(
                 chatRoom.getRoomId(),
                 chatRoom.getName(),
                 chatRoom.getBuyer().getNickname(),
-                chatRoom.getSeller().getNickname()
+                chatRoom.getSeller().getNickname(),
+                isNew
         );
     }
 }

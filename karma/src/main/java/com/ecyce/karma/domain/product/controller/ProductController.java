@@ -1,0 +1,77 @@
+package com.ecyce.karma.domain.product.controller;
+
+import com.ecyce.karma.domain.auth.customAnnotation.AuthUser;
+import com.ecyce.karma.domain.bookmark.service.BookmarkService;
+import com.ecyce.karma.domain.product.dto.response.ProductDetailResponse;
+import com.ecyce.karma.domain.product.dto.request.ProductRequest;
+import com.ecyce.karma.domain.product.dto.response.ProductSimpleResponse;
+import com.ecyce.karma.domain.product.service.ProductService;
+import com.ecyce.karma.domain.user.entity.User;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+
+@RestController
+@RequestMapping("/product")
+@RequiredArgsConstructor
+public class ProductController {
+
+    private final ProductService productService;
+    private final BookmarkService bookmarkService;
+
+    /* 상품 등록  , 현재 사진 업로드하는 코드는 포함되어 있지 않음 */
+    @PostMapping
+    public ResponseEntity<ProductDetailResponse> registerProduct(@AuthUser User user , @RequestBody ProductRequest dto){
+         ProductDetailResponse response = productService.registerProduct(user  , dto);
+         return ResponseEntity.status(HttpStatus.CREATED)
+                 .body(response);
+    }
+
+   /* 단일 상품 조회 (상세)*/
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductDetailResponse> getProductDetail(Optional<User> userOpt , @PathVariable("productId") Long productId){
+        User user = userOpt.orElse(null); // user가 없으면 null로 설정
+        ProductDetailResponse dto = productService.getProductDetail(user ,productId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(dto);
+    }
+
+    /* 상품 리스트 조회*/
+    @GetMapping
+    public ResponseEntity<List<ProductSimpleResponse>> getProductList(Optional<User> userOpt){
+        User user = userOpt.orElse(null); // user가 없으면 null로 설정
+        List<ProductSimpleResponse> dtos = productService.getProductList(user);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(dtos);
+    }
+
+    /* 상품 수정 */
+//    @PatchMapping("/{productId}")
+//    public ResponseEntity<ProductDetailResponse> modifyProduct(@AuthUser User user ,@PathVariable("productId") Long productId , @RequestBody ProductRequest dto){
+//        ProductDetailResponse response = productService.modifyProduct(user , productId ,dto);
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(response);
+//    }
+
+    /* 북마크 등록 */
+    @PostMapping("/{productId}/bookmark")
+    public ResponseEntity<String> addBookmark(@AuthUser User user, @PathVariable("productId") Long productId) {
+        bookmarkService.create(productId, user.getUserId());
+        return ResponseEntity.status(HttpStatus.CREATED).body("북마크가 등록되었습니다.");
+    }
+
+    /* 북마크 삭제 */
+    @DeleteMapping("/{productId}/bookmark")
+    public ResponseEntity<String> deleteBookmark(@AuthUser User user, @PathVariable("productId") Long productId) {
+        bookmarkService.delete(productId, user.getUserId());
+        return ResponseEntity.status(HttpStatus.OK).body("북마크가 삭제되었습니다.");
+    }
+
+}

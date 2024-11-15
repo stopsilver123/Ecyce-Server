@@ -1,12 +1,16 @@
 package com.ecyce.karma.domain.user.service;
 
+import com.ecyce.karma.domain.address.entity.Address;
+import com.ecyce.karma.domain.address.repository.AddressRepository;
 import com.ecyce.karma.domain.order.entity.Orders;
 import com.ecyce.karma.domain.order.repository.OrdersRepository;
 import com.ecyce.karma.domain.product.entity.Product;
 import com.ecyce.karma.domain.product.repository.ProductRepository;
 import com.ecyce.karma.domain.review.entity.Review;
 import com.ecyce.karma.domain.review.repository.ReviewRepository;
+import com.ecyce.karma.domain.user.dto.request.UserInfoRequest;
 import com.ecyce.karma.domain.user.dto.response.ArtistInfoResponse;
+import com.ecyce.karma.domain.user.dto.response.UserInfo;
 import com.ecyce.karma.domain.user.entity.User;
 import com.ecyce.karma.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +31,7 @@ public class UserService {
     private final ProductRepository productRepository;
     private final OrdersRepository ordersRepository;
     private final ReviewRepository reviewRepository;
+    private final AddressRepository addressRepository;
 
     /* 작가 정보 반환 */
     public ArtistInfoResponse getArtistInfo(Long userId) {
@@ -61,4 +66,20 @@ public class UserService {
         return averageRating;
     }
 
+    /* 사용자 정보 조회 */
+    public UserInfo getUserInfo(User user) {
+        return UserInfo.from(user);
+    }
+
+
+    /* 새로운 사용자인 경우 정보 저장 */
+    public UserInfo saveNewUser(User user, UserInfoRequest dto) {
+        // 주소 먼저 update
+        Address updateAddress =  Address.toEntity(user , dto);
+        addressRepository.save(updateAddress);
+        user.updateNewUserInfo(user , dto);
+        userRepository.save(user);
+        User updateUser = userRepository.findByUserId(user.getUserId());
+        return UserInfo.from(updateUser);
+    }
 }

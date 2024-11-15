@@ -19,7 +19,7 @@ import java.util.Date;
 public class JwtService {
 
     private static final String BEARER_TYPE = "Bearer";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME =1000* 60*60; //1시간
+    private static final long ACCESS_TOKEN_EXPIRE_TIME =1000*60*60; //1시간
     private static final long REFRESH_TOKEN_EXPIRE_IN = 1000 * 60 * 60*24 * 14; // 14일
 
 
@@ -50,11 +50,11 @@ public class JwtService {
                 .build();
         if(jwtRefreshTokenRepository.findByUserId(userId) == null){ // 신규 회원일 경우
             jwtRefreshTokenRepository.save(jwtRefreshToken);
-            return JwtTokens.of(accessToken , BEARER_TYPE , ACCESS_TOKEN_EXPIRE_TIME , true);
+            return JwtTokens.of(accessToken ,refreshToken ,BEARER_TYPE , ACCESS_TOKEN_EXPIRE_TIME , true);
         }
         else{ // 기존 회원인 경우
             updateRefreshToken(userId , refreshToken);
-            return JwtTokens.of(accessToken , BEARER_TYPE , ACCESS_TOKEN_EXPIRE_TIME , false);
+            return JwtTokens.of(accessToken ,refreshToken, BEARER_TYPE , ACCESS_TOKEN_EXPIRE_TIME , false);
 
         }
     }
@@ -128,8 +128,8 @@ public class JwtService {
     /* 리프레시 토큰으로 액세스 토큰 재발급 */
     @Transactional
     public JwtTokens reissueAccessToken(HttpServletRequest request) {
-        String accessToken = getTokenFromRequest(request);
-        Long userId = extractUserId(accessToken);
+        String Token = getTokenFromRequest(request);
+        Long userId = extractUserId(Token);
         // accessToken으로 찾은 유저 아이디로 refreshToken 찾아 가져오기
         JwtRefreshToken jwtRefreshToken = jwtRefreshTokenRepository.findByUserId(userId);
         String refreshToken = jwtRefreshToken.getRefreshToken();

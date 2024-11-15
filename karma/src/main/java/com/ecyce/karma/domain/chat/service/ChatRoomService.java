@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,10 +28,26 @@ public class ChatRoomService {
         User otherUser = userRepository.findByNickname(otherUserName)
                 .orElseThrow(() -> new IllegalArgumentException("INVALID_OTHER_USER_NAME"));
 
-        ChatRoom chatRoom = setupChatRoomWithRoles(creator, otherUser, isOtherUserBuyer);
+        // buyer와 seller 설정
+        User buyer = isOtherUserBuyer ? otherUser : creator;
+        User seller = isOtherUserBuyer ? creator : otherUser;
+
+        // 기존 채팅방 여부 확인
+        Optional<ChatRoom> existingChatRoom = chatRoomRepository.findByBuyerAndSeller(buyer, seller);
+        if (existingChatRoom.isPresent()) {
+            // 기존 채팅방 반환
+            return ChatRoomResponseDto.from(existingChatRoom.get(), false);
+        }
+
+        // 새 채팅방 생성
+        ChatRoom chatRoom = ChatRoom.builder()
+                .buyer(buyer)
+                .seller(seller)
+                .name(otherUser.getNickname())
+                .build();
         chatRoomRepository.save(chatRoom);
 
-        return ChatRoomResponseDto.from(chatRoom);
+        return ChatRoomResponseDto.from(chatRoom, true);
     }
 
     /* 전체 채팅방 목록: 사용자가 buyer 또는 seller로 참여한 채팅방 */
@@ -41,17 +58,17 @@ public class ChatRoomService {
                 .collect(Collectors.toList());
     }
 
-    /* 판매 채팅방 목록: 사용자가 buyer로 참여한 채팅방 */
+    /* 판매 채팅방 목록: 사용자가 seller로 참여한 채팅방 */
     public List<ChatRoomListDto> findSellingChatRooms(User user) {
-        List<ChatRoom> chatRooms = chatRoomRepository.findByBuyer(user);
+        List<ChatRoom> chatRooms = chatRoomRepository.findBySeller(user); // 판매자 기준
         return chatRooms.stream()
                 .map(this::toChatRoomListDto)
                 .collect(Collectors.toList());
     }
 
-    /* 구매 채팅방 목록: 사용자가 seller로 참여한 채팅방 */
+    /* 구매 채팅방 목록: 사용자가 buyer로 참여한 채팅방 */
     public List<ChatRoomListDto> findBuyingChatRooms(User user) {
-        List<ChatRoom> chatRooms = chatRoomRepository.findBySeller(user);
+        List<ChatRoom> chatRooms = chatRoomRepository.findByBuyer(user); // 구매자 기준
         return chatRooms.stream()
                 .map(this::toChatRoomListDto)
                 .collect(Collectors.toList());
@@ -71,17 +88,5 @@ public class ChatRoomService {
     private ChatRoomListDto toChatRoomListDto(ChatRoom chatRoom) {
         ChatMessage latestMessage = chatMessageRepository.findTopByChatRoomOrderByTimestampDesc(chatRoom);
         return ChatRoomListDto.from(chatRoom, latestMessage);
-    }
-
-    // creator가 buyer인지 seller인지 판단
-    private ChatRoom setupChatRoomWithRoles(User creator, User otherUser, boolean isOtherUserBuyer) {
-        User buyer = isOtherUserBuyer ? otherUser : creator;
-        User seller = isOtherUserBuyer ? creator : otherUser;
-
-        return ChatRoom.builder()
-                .buyer(buyer)
-                .seller(seller)
-                .name(otherUser.getNickname())
-                .build();
     }
 }

@@ -29,7 +29,7 @@ public class Address{
     @Column(nullable = false)
     private Long postalCode; //우편번호
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "userId" ,updatable = false, nullable = false)
     private User user;
 
@@ -56,5 +56,9 @@ public class Address{
                 .address2(request.address2())
                 .address3(request.address3())
                 .build();
+    }
+
+    public void setUser(User user1){
+        this.user = user1;
     }
 }

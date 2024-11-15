@@ -61,17 +61,18 @@ public class User {
     @OneToMany(mappedBy = "buyerUser", cascade = CascadeType.ALL, orphanRemoval = true)
      List<Orders> userAsBuyer = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Address address;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    List<Address> address = new ArrayList<>();
 
     @Builder
-    public  User(String nickname , String email , String profileImage , String phoneNumber , String bio , String kakaoAccessToken){
+    public  User(String nickname , String email , String profileImage , String phoneNumber , String bio , String kakaoAccessToken, List<Address> addressList){
         this.nickname = nickname;
         this.email  = email;
         this.profileImage = profileImage;
         this.phoneNumber = phoneNumber;
         this.bio = bio;
         this.kakaoAccessToken = kakaoAccessToken;
+        this.address = addressList;
     }
 
     // 액세스 토큰 업데이트
@@ -84,12 +85,14 @@ public class User {
         this.name = userInfoRequest.name();
         this.nickname = userInfoRequest.nickname();
         this.phoneNumber = userInfoRequest.phoneNumber();
-        this.address = Address.builder()
+        Address newAddress = Address.builder()
                 .postalCode(userInfoRequest.postalCode())
                 .address1(userInfoRequest.address1())
                 .address2(userInfoRequest.address2())
                 .address3(userInfoRequest.address3())
                 .build();
+        newAddress.setUser(user);
+        this.address.add(newAddress);
 
     }
 }

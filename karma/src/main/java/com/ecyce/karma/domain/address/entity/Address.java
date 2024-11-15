@@ -1,5 +1,6 @@
 package com.ecyce.karma.domain.address.entity;
 
+import com.ecyce.karma.domain.user.dto.request.UserInfoRequest;
 import com.ecyce.karma.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -45,5 +46,15 @@ public class Address{
     @Override
     public String toString() {
         return String.format("[%d] %s %s %s", postalCode, address1, address2, address3);
+    }
+
+    public static Address toEntity(User user , UserInfoRequest request){
+        return Address.builder()
+                .user(user)
+                .postalCode(request.postalCode())
+                .address1(request.address1())
+                .address2(request.address2())
+                .address3(request.address3())
+                .build();
     }
 }

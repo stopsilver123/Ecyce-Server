@@ -10,19 +10,21 @@ import lombok.NoArgsConstructor;
 public class JwtTokens {
 
     private String accessToken;
+    private String refreshToken;
     private String grantType;
     private Long expiresIn;
     private Boolean isNewUser;
 
     @Builder
-    public  JwtTokens(String accessToken , String grantType , Long expiresIn , Boolean isNewUser){
+    public  JwtTokens(String accessToken ,String refreshToken , String grantType , Long expiresIn , Boolean isNewUser){
         this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
         this.grantType = grantType;
         this.expiresIn = expiresIn;
         this.isNewUser = isNewUser;
     }
 
-    public static JwtTokens of(String accessToken , String grantType , Long expiresIn , Boolean isNewUser){
-        return new JwtTokens(accessToken , grantType , expiresIn , isNewUser);
+    public static JwtTokens of(String accessToken, String refreshToken, String grantType , Long expiresIn , Boolean isNewUser){
+        return new JwtTokens(accessToken ,refreshToken, grantType , expiresIn , isNewUser);
     }
 }

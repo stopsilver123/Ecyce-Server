@@ -75,8 +75,8 @@ public class ChatRoomService {
 
     // creator가 buyer인지 seller인지 판단
     private ChatRoom setupChatRoomWithRoles(User creator, User otherUser, boolean isOtherUserBuyer) {
-        User buyer = isOtherUserBuyer ? creator : otherUser;
-        User seller = isOtherUserBuyer ? otherUser : creator;
+        User buyer = isOtherUserBuyer ? otherUser : creator;
+        User seller = isOtherUserBuyer ? creator : otherUser;
 
         return ChatRoom.builder()
                 .buyer(buyer)

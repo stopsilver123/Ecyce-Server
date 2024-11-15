@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChatRoomRequestDto {
     private String otherUserName; // 상대방의 닉네임
-    private boolean isOtherUserBuyer; // 상대가 buyer인지 여부
+    private Boolean isOtherUserBuyer; // 상대가 buyer인지 여부
 }

@@ -73,10 +73,9 @@ public class UserService {
 
 
     /* 새로운 사용자인 경우 정보 저장 */
-    public UserInfo saveNewUser(User user, UserInfoRequest dto) {
+    public UserInfo saveNewUser(User user, UserInfoRequest dto)  {
         // 주소 먼저 update
         Address updateAddress =  Address.toEntity(user , dto);
-        addressRepository.save(updateAddress);
         user.updateNewUserInfo(user , dto);
         userRepository.save(user);
         User updateUser = userRepository.findByUserId(user.getUserId());

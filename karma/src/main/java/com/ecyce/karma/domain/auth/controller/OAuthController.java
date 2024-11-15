@@ -29,7 +29,6 @@ public class OAuthController {
     // 리프레시 토큰으로 액세스 토큰 재발급
     @PostMapping("/reissue")
     public ResponseEntity<JwtTokens> reissueAccessToken(HttpServletRequest request) {
-        log.info("accesstoken 재발급 시도");
         return ResponseEntity.ok(jwtService.reissueAccessToken(request));
     }
 

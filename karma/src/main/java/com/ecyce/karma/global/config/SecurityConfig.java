@@ -3,7 +3,6 @@ package com.ecyce.karma.global.config;
 import com.ecyce.karma.domain.auth.errorHandler.CustomJwtAuthenticationEntryPoint;
 import com.ecyce.karma.domain.auth.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerJwtAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,15 +30,16 @@ public class SecurityConfig {
             "/login/oauth2/kakao", // 로그인
             "/product/{productId}", // 상품 상세 조회
             "/product", // 전체 상품 조회
-            "/product/categorycode/*" // 카테고리별 조회
+            "/product/categorycode/*", // 카테고리별 조회
+            "/ws/**"
     };
 
     // cors 설정
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:8080" , "http://localhost:3000" , "https://api.ecyce-karma.n-e.kr/"));
+        configuration.setAllowedOriginPatterns(Arrays.asList(
+                "https://jiangxy.github.io", "http://localhost:3000", "https://api.ecyce-karma.n-e.kr"));
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

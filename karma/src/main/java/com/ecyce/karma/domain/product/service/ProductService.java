@@ -88,6 +88,27 @@ public class ProductService {
         }
     }
 
+    /* 특정 작가의 작품 리스트 반환 */
+    public List<ProductSimpleResponse> getProductListOfArtist(Long artistId ,User user) {
+        List<Product> productList = productRepository.findByUserId(artistId);
+        if(user == null){ // 로그인하지 않은 사용자
+            List<ProductSimpleResponse> productListwithoutBookmark = productList.stream()
+                    .map(product -> ProductSimpleResponse.from(product , false))
+                    .collect(Collectors.toList());
+            return productListwithoutBookmark;
+        }
+        else { //로그인한 사용자
+            List<ProductSimpleResponse> productListwithBookmark = productList.stream()
+                    .map(product -> {
+                        // 북마크 여부 확인
+                        Boolean isMarked = bookmarkRepository.isBookmarked(product.getProductId(), user.getUserId());
+                        return ProductSimpleResponse.from(product, isMarked);
+                    })
+                    .collect(Collectors.toList());
+            return productListwithBookmark;
+        }
+    }
+
     /* 상품 내용 수정*/
 //    public ProductDetailResponse modifyProduct(User user, Long productId ,ProductRequest dto) {
 //        Product product = productRepository.findById(productId)

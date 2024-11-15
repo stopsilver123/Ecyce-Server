@@ -5,8 +5,6 @@ import com.ecyce.karma.domain.bookmark.entity.Bookmark;
 import com.ecyce.karma.domain.notice.entity.Notice;
 import com.ecyce.karma.domain.order.entity.Orders;
 import com.ecyce.karma.domain.product.entity.Product;
-import com.ecyce.karma.domain.sales.entity.Sales;
-import com.ecyce.karma.domain.user.dto.request.UserInfoRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -62,9 +60,6 @@ public class User {
     @OneToMany(mappedBy = "buyerUser", cascade = CascadeType.ALL, orphanRemoval = true)
      List<Orders> userAsBuyer = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
-     List<Sales> sales = new ArrayList<>();
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Address address;
 
@@ -78,23 +73,9 @@ public class User {
         this.kakaoAccessToken = kakaoAccessToken;
     }
 
-    /* 액세스 토큰 업데이트 */
+    // 액세스 토큰 업데이트
     public void updateKakaoAccessToken(String kakaoAccessToken) {
         this.kakaoAccessToken = kakaoAccessToken;
-    }
-
-    /* 새로운 회원인 경우 정보 저장*/
-    public void updateNewUserInfo(User user , UserInfoRequest userInfoRequest){
-        this.name = userInfoRequest.name();
-        this.nickname = userInfoRequest.nickname();
-        this.phoneNumber = userInfoRequest.phoneNumber();
-        this.address = Address.builder()
-                .postalCode(userInfoRequest.postalCode())
-                .address1(userInfoRequest.address1())
-                .address2(userInfoRequest.address2())
-                .address3(userInfoRequest.address3())
-                .build();
-
     }
 }
 

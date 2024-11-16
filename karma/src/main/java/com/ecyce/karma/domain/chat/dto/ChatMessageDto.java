@@ -9,7 +9,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -19,6 +18,7 @@ public class ChatMessageDto {
     private String sender;
     private String content;
     private MessageType type;
+    private LocalDateTime timestamp;
 
     // DTO를 엔티티로 변환
     public static ChatMessage to(ChatMessageDto dto, ChatRoom chatRoom, User sender) {
@@ -39,6 +39,7 @@ public class ChatMessageDto {
                 .sender(chatMessage.getSender().getNickname())
                 .content(chatMessage.getContent())
                 .type(chatMessage.getType())
+                .timestamp(chatMessage.getTimestamp())
                 .build();
     }
 }

@@ -53,25 +53,19 @@ public class ChatRoomService {
     /* 전체 채팅방 목록: 사용자가 buyer 또는 seller로 참여한 채팅방 */
     public List<ChatRoomListDto> findAllChatRooms(User user) {
         List<ChatRoom> chatRooms = chatRoomRepository.findByBuyerOrSeller(user, user);
-        return chatRooms.stream()
-                .map(this::toChatRoomListDto)
-                .collect(Collectors.toList());
+        return mapToChatRoomListDto(chatRooms, user);
     }
 
     /* 판매 채팅방 목록: 사용자가 seller로 참여한 채팅방 */
     public List<ChatRoomListDto> findSellingChatRooms(User user) {
         List<ChatRoom> chatRooms = chatRoomRepository.findBySeller(user); // 판매자 기준
-        return chatRooms.stream()
-                .map(this::toChatRoomListDto)
-                .collect(Collectors.toList());
+        return mapToChatRoomListDto(chatRooms, user);
     }
 
     /* 구매 채팅방 목록: 사용자가 buyer로 참여한 채팅방 */
     public List<ChatRoomListDto> findBuyingChatRooms(User user) {
         List<ChatRoom> chatRooms = chatRoomRepository.findByBuyer(user); // 구매자 기준
-        return chatRooms.stream()
-                .map(this::toChatRoomListDto)
-                .collect(Collectors.toList());
+        return mapToChatRoomListDto(chatRooms, user);
     }
 
     /* 특정 채팅방의 상세 정보 조회 */
@@ -84,9 +78,13 @@ public class ChatRoomService {
                 .collect(Collectors.toList());
     }
 
-    // ChatRoom을 ChatRoomListDto로 변환
-    private ChatRoomListDto toChatRoomListDto(ChatRoom chatRoom) {
-        ChatMessage latestMessage = chatMessageRepository.findTopByChatRoomOrderByTimestampDesc(chatRoom);
-        return ChatRoomListDto.from(chatRoom, latestMessage);
+    /* ChatRoom을 ChatRoomListDto로 변환 */
+    private List<ChatRoomListDto> mapToChatRoomListDto(List<ChatRoom> chatRooms, User currentUser) {
+        return chatRooms.stream()
+                .map(chatRoom -> {
+                    ChatMessage latestMessage = chatMessageRepository.findTopByChatRoomOrderByTimestampDesc(chatRoom);
+                    return ChatRoomListDto.from(chatRoom, latestMessage, currentUser);
+                })
+                .collect(Collectors.toList());
     }
 }

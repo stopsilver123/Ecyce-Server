@@ -1,9 +1,11 @@
 package com.ecyce.karma.domain.chat.controller;
 
+import com.ecyce.karma.domain.auth.customAnnotation.AuthUser;
 import com.ecyce.karma.domain.chat.dto.ChatListResponseDto;
 import com.ecyce.karma.domain.chat.dto.ChatMessageDto;
 import com.ecyce.karma.domain.chat.entity.ChatMessage;
 import com.ecyce.karma.domain.chat.service.ChatMessageService;
+import com.ecyce.karma.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -27,8 +29,8 @@ public class ChatMessageController {
 
     /* 채팅방의 채팅 내역 조회 */
     @GetMapping("/chat/messages/{roomId}")
-    public ResponseEntity<ChatListResponseDto> getMessagesByRoomId(@PathVariable("roomId") Long roomId) {
-        ChatListResponseDto response = chatMessageService.findMessagesByRoomId(roomId);
+    public ResponseEntity<ChatListResponseDto> getMessagesByRoomId(@PathVariable("roomId") Long roomId, @AuthUser User user) {
+        ChatListResponseDto response = chatMessageService.findMessagesByRoomId(roomId, user);
         return ResponseEntity.ok(response);
     }
 }

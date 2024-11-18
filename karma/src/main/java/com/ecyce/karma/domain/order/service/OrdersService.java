@@ -3,8 +3,6 @@ package com.ecyce.karma.domain.order.service;
 import com.ecyce.karma.domain.order.dto.OrderCreateRequestDto;
 import com.ecyce.karma.domain.order.dto.OrderCreateResponseDto;
 import com.ecyce.karma.domain.order.dto.OrderReadResponseDto;
-import com.ecyce.karma.domain.order.entity.OrderState;
-import com.ecyce.karma.domain.order.entity.OrderStatus;
 import com.ecyce.karma.domain.order.entity.Orders;
 import com.ecyce.karma.domain.order.repository.OrdersRepository;
 import com.ecyce.karma.domain.product.entity.Product;

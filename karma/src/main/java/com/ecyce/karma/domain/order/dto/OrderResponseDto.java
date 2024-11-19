@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderReadResponseDto {
+public class OrderResponseDto {
+    /**주문 상세 정보 조회*/
     // 주문 정보
     private Long orderId;
     private String productName;
@@ -43,8 +44,8 @@ public class OrderReadResponseDto {
     private Integer deliveryFee;
     private Integer totalPrice;
 
-    public static OrderReadResponseDto from(Orders order) {
-        return new OrderReadResponseDto(
+    public static OrderResponseDto from(Orders order) {
+        return new OrderResponseDto(
                 // 주문 정보
                 order.getOrderId(),
                 order.getProduct().getProductName(),

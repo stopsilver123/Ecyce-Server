@@ -13,7 +13,6 @@ import com.ecyce.karma.domain.user.dto.response.AllUserInfo;
 import com.ecyce.karma.domain.user.dto.response.ArtistInfoResponse;
 import com.ecyce.karma.domain.user.dto.response.UserInfo;
 import com.ecyce.karma.domain.user.entity.User;
-import com.ecyce.karma.domain.user.mapper.UserMapper;
 import com.ecyce.karma.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

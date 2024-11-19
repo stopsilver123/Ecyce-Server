@@ -1,11 +1,13 @@
 package com.ecyce.karma.domain.user.dto.request;
 
-public record ModifyInfoRequest(
+import org.openapitools.jackson.nullable.JsonNullable;
 
-        String name,
-        String nickname,
-        String bio,
-        String phoneNumber
+public record ModifyInfoRequest(
+        JsonNullable<String> name,
+        JsonNullable<String> nickname,
+        JsonNullable<String> bio,
+        JsonNullable<String> phoneNumber
 
 ) {
+
 }

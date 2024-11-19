@@ -33,24 +33,30 @@ public class OrdersController {
     }
 
     // 주문 단건 조회
-    // TODO : 조회에 AuthUser 추가 필요
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderResponseDto> getOrder(@PathVariable Long orderId) {
-        OrderResponseDto orderResponseDto = ordersService.getOrderById(orderId);
+    public ResponseEntity<OrderResponseDto> getOrder(@PathVariable Long orderId, @AuthUser User user) {
+        OrderResponseDto orderResponseDto = ordersService.getOrderById(orderId, user);
         return ResponseEntity.ok(orderResponseDto);
     }
 
-    // 주문 전체 조회
-    @GetMapping
-    public ResponseEntity<List<OrderOverviewResponseDto>> getAllOrders() {
-        List<OrderOverviewResponseDto> orderList = ordersService.getAllOrders();
-        return ResponseEntity.ok(orderList);
+    // 구매 내역 전체 조회
+    @GetMapping("/buyer")
+    public ResponseEntity<List<OrderOverviewResponseDto>> getBuyerOrders(@AuthUser User user) {
+        List<OrderOverviewResponseDto> orders = ordersService.getAllOrdersByBuyer(user);
+        return ResponseEntity.ok(orders);
+    }
+
+    // 판매 내역 전체 조회
+    @GetMapping("/seller")
+    public ResponseEntity<List<OrderOverviewResponseDto>> getSellerOrders(@AuthUser User user) {
+        List<OrderOverviewResponseDto> orders = ordersService.getAllOrdersBySeller(user);
+        return ResponseEntity.ok(orders);
     }
 
     // 주문 취소
     @PatchMapping("/{orderId}")
     public ResponseEntity<String> cancelOrder(@PathVariable Long orderId, @AuthUser User user) {
-        ordersService.cancelOrder(orderId, user);
+        ordersService.cancelOrder(orderId, user.getUserId());
         return ResponseEntity.ok("주문이 성공적으로 취소되었습니다.");
     }
 }

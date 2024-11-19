@@ -12,6 +12,8 @@ import com.ecyce.karma.domain.product.repository.ProductOptionRepository;
 import com.ecyce.karma.domain.product.repository.ProductRepository;
 import com.ecyce.karma.domain.user.entity.User;
 import com.ecyce.karma.domain.user.repository.UserRepository;
+import com.ecyce.karma.global.exception.CustomException;
+import com.ecyce.karma.global.exception.ErrorCode;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +27,14 @@ public class OrdersService {
     private final OrdersRepository orderRepository;
     private final ProductRepository productRepository;
     private final ProductOptionRepository productOptionRepository;
-    private final UserRepository userRepository;
 
-    // 주문 생성하기
+    // 주문 생성
     @Transactional
     public OrderCreateResponseDto createOrder(OrderCreateRequestDto requestDto, User buyer) {
         Product product = productRepository.findById(requestDto.getProductId())
-                                           .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+                                           .orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
         ProductOption productOption = productOptionRepository.findById(requestDto.getProductOptionId())
-                                                       .orElseThrow(() -> new IllegalArgumentException("상품 옵션을 찾을 수 없습니다."));
+                                                       .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_OPTION_NOT_FOUND));
         User seller = product.getUser();
         Orders order = Orders.createOrder(requestDto.getRequest(), seller, buyer, product, productOption,
                 requestDto.getOrderCount());
@@ -43,37 +44,59 @@ public class OrdersService {
         return OrderCreateResponseDto.from(savedOrder);
     }
 
-    // 주문 단건 조회
-    public OrderResponseDto getOrderById(Long orderId) {
-        Orders order = orderRepository.findById(orderId)
-                                      .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
+    // 주문 단건 조회 (판매자, 구매자 동시 접근 가능)
+    public OrderResponseDto getOrderById(Long orderId, User user) {
+        // 주문 존재 여부 확인
+        Orders order = orderRepository.findByOrderId(orderId)
+                                      .orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
+
+        // 권한 확인
+        if (!order.getBuyerUser().getUserId().equals(user.getUserId()) &&
+                !order.getSellerUser().getUserId().equals(user.getUserId())) {
+            throw new CustomException(ErrorCode.ORDER_ACCESS_DENIED);
+        }
+
         return OrderResponseDto.from(order);
     }
 
-    // 주문 전체 조회
-    public List<OrderOverviewResponseDto> getAllOrders() {
-        // 1. 전체 주문 데이터 조회
-        List<Orders> orders = orderRepository.findAll();
-
-        // 2. OrderOverviewResponseDto로 변환하여 반환
+    // 구매 내역 조회 (특정 구매자 기준)
+    public List<OrderOverviewResponseDto> getAllOrdersByBuyer(User user) {
+        List<Orders> orders = orderRepository.findAllByBuyerUserId(user.getUserId());
+//        if (orders.isEmpty()) {
+//            throw new CustomException(ErrorCode.ORDER_NOT_FOUND);
+//        }
         return orders.stream()
-                     .map(OrderOverviewResponseDto::fromEntity) // fromEntity 메서드를 사용
+                     .map(OrderOverviewResponseDto::fromEntity)
                      .collect(Collectors.toList());
     }
 
+    // 판매 내역 조회 (특정 판매자 기준)
+    public List<OrderOverviewResponseDto> getAllOrdersBySeller(User user) {
+        List<Orders> orders = orderRepository.findAllBySellerUserId(user.getUserId());
+//        if (orders.isEmpty()) {
+//            throw new CustomException(ErrorCode.ORDER_NOT_FOUND);
+//        }
+        return orders.stream()
+                     .map(OrderOverviewResponseDto::fromEntity)
+                     .collect(Collectors.toList());
+    }
 
     // 주문 취소
     @Transactional
-    public void cancelOrder(Long orderId, User buyer) {
-        Orders order = orderRepository.findById(orderId)
-                                      .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
+    public void cancelOrder(Long orderId, Long buyerID) {
+        Orders order = orderRepository.findByOrderIdAndUserId(orderId, buyerID)
+                                      .orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
 
-        // 요청자가 구매자인지 확인
-        if (!order.getBuyerUser().equals(buyer)) {
-            throw new IllegalArgumentException("해당 주문의 취소 권한이 없습니다.");
+        // 권한 확인
+        if (!order.getBuyerUser().getUserId().equals(buyerID)) {
+            throw new CustomException(ErrorCode.ORDER_ACCESS_DENIED);
         }
 
         // 주문 상태를 취소로 변경
-        order.cancelOrder();
+        try {
+            order.cancelOrder();
+        } catch (IllegalStateException e) {
+            throw new CustomException(ErrorCode.ORDER_CANNOT_BE_CANCELED);
+        }
     }
 }

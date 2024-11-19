@@ -7,6 +7,8 @@ import com.ecyce.karma.domain.product.entity.ProductOption;
 import com.ecyce.karma.domain.review.entity.Review;
 import com.ecyce.karma.domain.user.entity.User;
 import com.ecyce.karma.global.entity.BaseTimeEntity;
+import com.ecyce.karma.global.exception.CustomException;
+import com.ecyce.karma.global.exception.ErrorCode;
 import jakarta.persistence.*;
 import jdk.jshell.Snippet.Status;
 import lombok.AccessLevel;
@@ -83,10 +85,54 @@ public class Orders extends BaseTimeEntity {
         return new Orders(request, seller, buyer, product, productOption, orderCount, payAmount);
     }
 
+    // 1. 주문 수락 또는 거절
+    public void acceptOrReject(boolean accepted) {
+        if (orderState != OrderState.접수완료) {
+            throw new CustomException(ErrorCode.INVALID_ORDER_STATE, String.format("현재 상태는 '%s'이며, 접수 완료 상태에서만 수락하거나 거절할 수 있습니다.", orderState));
+        }
+        this.orderState = accepted ? OrderState.제작대기 : OrderState.주문거절;
+    }
+
+    // 2. 제작 시작
+    public void startProduction() {
+        if (orderState != OrderState.제작대기) {
+            throw new CustomException(ErrorCode.INVALID_ORDER_STATE, String.format("현재 상태는 '%s'이며, 제작 대기 상태에서만 제작을 시작할 수 있습니다.", orderState));
+        }
+        this.orderState = OrderState.제작중;
+    }
+
+    // 3. 제작 완료
+    public void completeProduction() {
+        if (orderState != OrderState.제작중) {
+            throw new CustomException(ErrorCode.INVALID_ORDER_STATE, String.format("현재 상태는 '%s'이며, 제작 중 상태에서만 제작을 완료할 수 있습니다.", orderState));
+        }
+        this.orderState = OrderState.제작완료;
+    }
+
+    // 4. 배송 시작 (송장번호 추가)
+    public void startShipping(String invoiceNumber) {
+        if (orderState != OrderState.제작완료) {
+            throw new CustomException(ErrorCode.INVALID_ORDER_STATE, String.format("현재 상태는 '%s'이며, 제작 완료 상태에서만 배송을 시작할 수 있습니다.", orderState));
+        }
+        if (invoiceNumber == null || invoiceNumber.isBlank()) {
+            throw new CustomException(ErrorCode.INVOICE_NUMBER_REQUIRED);
+        }
+        this.invoiceNumber = invoiceNumber;
+        this.orderState = OrderState.배송중;
+    }
+
+    // 5. 구매 확정
+    public void confirmOrder() {
+        if (orderState != OrderState.배송중) {
+            throw new CustomException(ErrorCode.INVALID_ORDER_STATE, String.format("현재 상태는 '%s'이며, 배송 중 상태에서만 구매를 확정할 수 있습니다.", orderState));
+        }
+        this.orderState = OrderState.구매확정;
+    }
+
     // 주문 취소
     public void cancelOrder() {
         if (orderState != OrderState.접수완료 && orderState != OrderState.제작대기) {
-            throw new IllegalStateException("현재 상태에서는 주문을 취소할 수 없습니다.");
+            throw new CustomException(ErrorCode.INVALID_ORDER_STATE, String.format("현재 상태는 '%s'이며, 접수 완료 및 제작 대기 상태에서만 주문을 취소할 수 있습니다.", orderState));
         }
         this.orderState = OrderState.주문취소;
     }

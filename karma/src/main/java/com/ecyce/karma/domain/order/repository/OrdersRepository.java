@@ -20,10 +20,6 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
     @Query("select o from Orders o where o.orderId = :orderId")
     Optional<Orders> findByOrderId(@Param("orderId") Long orderId);
 
-    // 단건 조회: 구매자 또는 판매자가 접근 가능
-    @Query("select o from Orders o where o.orderId = :orderId and (o.buyerUser.userId = :userId or o.sellerUser.userId = :userId)")
-    Optional<Orders> findByOrderIdAndUserId(@Param("orderId") Long orderId, @Param("userId") Long userId);
-
     // 구매 내역 조회 (특정 구매자의 전체 주문)
     @Query("select o from Orders o where o.buyerUser.userId = :userId")
     List<Orders> findAllByBuyerUserId(@Param("userId") Long userId);

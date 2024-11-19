@@ -29,7 +29,9 @@ public enum ErrorCode {
     // orders
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다."),
     ORDER_ACCESS_DENIED(HttpStatus.FORBIDDEN, "해당 주문에 접근 권한이 없습니다."),
-    ORDER_CANNOT_BE_CANCELED(HttpStatus.BAD_REQUEST, "현재 상태에서는 주문을 취소할 수 없습니다.");
+    INVALID_ORDER_STATE(HttpStatus.BAD_REQUEST, "주문 상태를 변경할 수 없습니다."),
+    INVOICE_NUMBER_REQUIRED(HttpStatus.BAD_REQUEST, "송장 번호는 필수입니다."),
+    ORDER_ALREADY_COMPLETED(HttpStatus.BAD_REQUEST, "이미 구매가 확정된 주문입니다.");
 
     private final HttpStatus status;
     private final String message;

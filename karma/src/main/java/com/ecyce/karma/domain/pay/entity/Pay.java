@@ -23,14 +23,14 @@ public class Pay extends BaseTimeEntity {
     private Orders orders;
 
     @Column(nullable = false)
-    private Long payAmount;
+    private Integer payAmount;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PayStatus payStatus;
 
     @Builder
-    public Pay(Orders orders , Long payAmount , PayStatus payStatus){
+    public Pay(Orders orders , Integer payAmount , PayStatus payStatus){
         this.orders = orders;
         this.payAmount = payAmount;
         this.payStatus =payStatus;

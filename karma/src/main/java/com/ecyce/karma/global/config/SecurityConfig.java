@@ -31,7 +31,9 @@ public class SecurityConfig {
             "/product/{productId}", // 상품 상세 조회
             "/product", // 전체 상품 조회
             "/product/categorycode/*", // 카테고리별 조회
-            "/ws/**"
+            "/ws/**",
+            "/reviews/{reviewId}", // 리뷰 상세 조회
+            "/product/{productId}/reviews" // 상품별 리뷰 조회
     };
 
     // cors 설정

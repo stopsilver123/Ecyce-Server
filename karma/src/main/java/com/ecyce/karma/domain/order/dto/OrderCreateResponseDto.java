@@ -12,17 +12,14 @@ import lombok.NoArgsConstructor;
 public class OrderCreateResponseDto {
     private Long orderId;
     private String orderState;
-    private String orderStatus;
     private LocalDateTime createdAt;
     private String request;
-    private Long price;
+    private Integer totalPrice;
 
     public static OrderCreateResponseDto from(Orders order) {
         return new OrderCreateResponseDto(
                 order.getOrderId(),
                 order.getOrderState()
-                     .name(),
-                order.getOrderStatus()
                      .name(),
                 order.getCreatedAt(),
                 order.getRequest(),

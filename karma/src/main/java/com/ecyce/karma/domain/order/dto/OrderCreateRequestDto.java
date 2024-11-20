@@ -20,5 +20,5 @@ public class OrderCreateRequestDto {
     private String request;
 
     @NotNull
-    private Long orderCount;
+    private Integer orderCount;
 }

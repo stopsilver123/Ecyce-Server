@@ -24,7 +24,7 @@ public class Review extends BaseTimeEntity {
 
 
     @Column(nullable = false)
-    private Long rating;
+    private Integer rating;
 
     @ManyToOne
     @JoinColumn(name = "userId" ,updatable = false, nullable = false)
@@ -35,11 +35,20 @@ public class Review extends BaseTimeEntity {
     private Orders orders;
 
     @Builder
-    public Review (String content , Long rating , User user , Orders orders ){
+    public Review (String content , Integer rating , User user , Orders orders ){
         this.content = content;
         this.rating = rating;
         this.user = user;
         this.orders = orders;
+    }
+
+    public static Review createReview(String content, Integer rating, User user, Orders order) {
+        return Review.builder()
+                .content(content)
+                .rating(rating)
+                .user(user)
+                .orders(order)
+                .build();
     }
 
 }

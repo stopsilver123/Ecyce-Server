@@ -33,7 +33,8 @@ public class SecurityConfig {
             "/product/categorycode/*", // 카테고리별 조회
             "/ws/**",
             "/reviews/{reviewId}", // 리뷰 상세 조회
-            "/product/{productId}/reviews" // 상품별 리뷰 조회
+            "/product/{productId}/reviews", // 상품별 리뷰 조회
+            "/api/s3/**" // s3 엔드포인트 추가
     };
 
     // cors 설정

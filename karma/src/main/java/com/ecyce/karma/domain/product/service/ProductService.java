@@ -1,6 +1,7 @@
 package com.ecyce.karma.domain.product.service;
 
 import com.ecyce.karma.domain.bookmark.repository.BookmarkRepository;
+import com.ecyce.karma.domain.product.dto.request.ModifyProductRequest;
 import com.ecyce.karma.domain.product.dto.request.OptionRequest;
 import com.ecyce.karma.domain.product.dto.response.OptionResponse;
 import com.ecyce.karma.domain.product.dto.response.ProductDetailResponse;
@@ -15,6 +16,7 @@ import com.ecyce.karma.global.exception.CustomException;
 import com.ecyce.karma.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -109,14 +111,28 @@ public class ProductService {
         }
     }
 
-    /* 상품 내용 수정*/
-//    public ProductDetailResponse modifyProduct(User user, Long productId ,ProductRequest dto) {
-//        Product product = productRepository.findById(productId)
-//                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
-//        // 수정하려는 사용자와 상품의 판매자가 일치하지 않을 때
-//        if(!user.getUserId().equals(product.getUser().getUserId())){
-//            throw new CustomException(ErrorCode.INVALID_ACCESS);
-//        }
-//
-//    }
+
+
+    /* 상품 정보 수정*/
+    public ProductDetailResponse modifyProduct(User user, Long productId , ModifyProductRequest dto) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        // 수정하려는 사용자와 상품의 판매자가 일치하지 않을 때
+        if(!user.getUserId().equals(product.getUser().getUserId())){
+            throw new CustomException(ErrorCode.INVALID_ACCESS);
+        }
+
+
+        product.updateInfo(dto);
+
+        productRepository.save(product);
+
+        List<ProductOption> productOptions = productOptionRepository.findByProductId(product.getProductId());
+        List<OptionResponse> optionResponseDtos = productOptions.stream()
+                .map(productOption -> OptionResponse.from(productOption))
+                .collect(Collectors.toList());
+
+        return ProductDetailResponse.of(product, optionResponseDtos);
+
+    }
 }

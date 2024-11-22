@@ -2,6 +2,7 @@ package com.ecyce.karma.domain.product.controller;
 
 import com.ecyce.karma.domain.auth.customAnnotation.AuthUser;
 import com.ecyce.karma.domain.bookmark.service.BookmarkService;
+import com.ecyce.karma.domain.product.dto.request.ModifyProductRequest;
 import com.ecyce.karma.domain.product.dto.response.ProductDetailResponse;
 import com.ecyce.karma.domain.product.dto.request.ProductRequest;
 import com.ecyce.karma.domain.product.dto.response.ProductSimpleResponse;
@@ -53,12 +54,12 @@ public class ProductController {
     }
 
     /* 상품 수정 */
-//    @PatchMapping("/{productId}")
-//    public ResponseEntity<ProductDetailResponse> modifyProduct(@AuthUser User user ,@PathVariable("productId") Long productId , @RequestBody ProductRequest dto){
-//        ProductDetailResponse response = productService.modifyProduct(user , productId ,dto);
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(response);
-//    }
+    @PatchMapping("/{productId}")
+    public ResponseEntity<ProductDetailResponse> modifyProduct(@AuthUser User user ,@PathVariable("productId") Long productId , @RequestBody ModifyProductRequest dto){
+        ProductDetailResponse response = productService.modifyProduct(user , productId , dto);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(response);
+    }
 
     /* 북마크 등록 */
     @PostMapping("/{productId}/bookmark")

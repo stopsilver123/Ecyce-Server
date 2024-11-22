@@ -20,7 +20,7 @@ public enum ErrorCode {
 
     // product
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND , "해당하는 제품을 찾을 수 없습니다."),
-    INVALID_ACCESS(HttpStatus.BAD_REQUEST , "해당 사용자는 제품 정보를 수정할 수 없습니다."),
+    INVALID_ACCESS(HttpStatus.BAD_REQUEST , "해당 사용자는 제품 정보에 요청할 수 없습니다."),
 
     // bookmark
     BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "북마크가 존재하지 않습니다. 북마크를 등록한 후 취소할 수 있습니다.");

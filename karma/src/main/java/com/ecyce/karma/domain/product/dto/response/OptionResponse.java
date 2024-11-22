@@ -5,7 +5,7 @@ import com.ecyce.karma.domain.product.entity.ProductOption;
 public record OptionResponse(
         Long optionId,
         String optionName,
-        int optionPrice
+        Integer optionPrice
 ) {
     public  static OptionResponse from(ProductOption productOption){
         return new OptionResponse(

@@ -22,7 +22,7 @@ public class ModifyProductRequest {
     JsonNullable<String> buyerNotice;
 
 
-    public  ModifyProductRequest(JsonNullable<String> productName , JsonNullable<Integer> price , JsonNullable<String> content,
+    public ModifyProductRequest(JsonNullable<String> productName , JsonNullable<Integer> price , JsonNullable<String> content,
                                  JsonNullable<Integer> duration , JsonNullable<Integer> rating , JsonNullable<ProductState> productState,
                                  JsonNullable<Integer> deliveryFee, JsonNullable<String> materialInfo , JsonNullable<String> buyerNotice
 

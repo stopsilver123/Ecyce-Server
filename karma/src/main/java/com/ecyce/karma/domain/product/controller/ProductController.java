@@ -9,6 +9,8 @@ import com.ecyce.karma.domain.product.dto.response.ProductDetailResponse;
 import com.ecyce.karma.domain.product.dto.request.ProductRequest;
 import com.ecyce.karma.domain.product.dto.response.ProductSimpleResponse;
 import com.ecyce.karma.domain.product.service.ProductService;
+import com.ecyce.karma.domain.review.dto.ReviewDetailDto;
+import com.ecyce.karma.domain.review.service.ReviewService;
 import com.ecyce.karma.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final BookmarkService bookmarkService;
+    private final ReviewService reviewService;
 
     /* 상품 등록  , 현재 사진 업로드하는 코드는 포함되어 있지 않음 */
     @PostMapping
@@ -90,6 +93,14 @@ public class ProductController {
     public ResponseEntity<String> deleteProduct(@AuthUser User user , @PathVariable("productId") Long productId){
         productService.deleteProduct(user , productId);
         return ResponseEntity.status(HttpStatus.OK).body("상품 정보가 삭제되었습니다.");
+    }
+
+    /* 상품 후기 목록 조회 */
+    @GetMapping("/{productId}/reviews")
+    public ResponseEntity<List<ReviewDetailDto>> getProductReviews(@PathVariable("productId") Long productId,
+                                                                   @RequestParam(name = "sort", defaultValue = "default") String sort) {
+        List<ReviewDetailDto> reviews = reviewService.getProductReviews(productId, sort);
+        return ResponseEntity.ok(reviews);
     }
 
 }

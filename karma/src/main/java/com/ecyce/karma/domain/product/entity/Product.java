@@ -52,7 +52,6 @@ public class Product {
     @Column
     private String materialInfo; // 소재의 정보
 
-
 //    @Column
 //    private String materialExample; // 소재의 정보
 

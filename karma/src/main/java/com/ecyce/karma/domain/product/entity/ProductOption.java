@@ -1,5 +1,6 @@
 package com.ecyce.karma.domain.product.entity;
 
+import com.ecyce.karma.domain.product.dto.request.ModifyOptionRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,6 +38,17 @@ public class ProductOption {
         this.optionName = optionName;
         this.optionPrice = optionPrice;
         this.product = product;
+    }
+
+    /* 상품 옵션 수정 */
+    public void updateOption(ModifyOptionRequest dto){
+       if(dto.getOptionName()!= null && dto.getOptionName().isPresent()){
+           this.optionName = dto.getOptionName().get();
+       }
+       if(dto.getOptionPrice() != null && dto.getOptionPrice().isPresent()){
+           this.optionPrice = dto.getOptionPrice().get();
+       }
+
     }
 
 

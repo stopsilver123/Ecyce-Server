@@ -50,11 +50,12 @@ dependencies {
 
 	/* stomp */
 	implementation 'org.webjars:stomp-websocket:2.3.3-1'
-  
-	/*mapstruct*/
-	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
+	/* json nullable */
+	implementation 'org.openapitools:jackson-databind-nullable:0.2.1'
+
+	/*S3*/
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 tasks.named('test') {

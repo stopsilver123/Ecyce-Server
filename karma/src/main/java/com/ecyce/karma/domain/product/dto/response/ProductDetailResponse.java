@@ -65,6 +65,5 @@ public record ProductDetailResponse(
         );
     }
 
-    /* 북마크도 포함 */
 
 }

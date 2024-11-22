@@ -97,21 +97,20 @@ public class User {
 
     /* 회원 정보 수정 메서드 */
     public void updateUserInfo(ModifyInfoRequest request) {
-        if (request.name().isPresent()) {
+        if (request.name() != null && request.name().isPresent()) {
             this.name = request.name().get();
         }
-        if (request.nickname().isPresent()) {
+        if (request.nickname() != null && request.nickname().isPresent()) {
             this.nickname = request.nickname().get();
         }
-        if (request.bio().isPresent()) {
+        if (request.bio() != null &&request.bio().isPresent()) {
             this.bio = request.bio().get();
         }
-        if (request.phoneNumber().isPresent()) {
+        if (request.phoneNumber() != null &&request.phoneNumber().isPresent()) {
             this.phoneNumber = request.phoneNumber().get();
         }
 
     }
-
 
 
 }

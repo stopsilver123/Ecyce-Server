@@ -32,7 +32,6 @@ public class UserService {
     private final ProductRepository productRepository;
     private final OrdersRepository ordersRepository;
     private final ReviewRepository reviewRepository;
-    private final UserMapper userMapper;
 
     /* 작가 정보 반환 */
     public ArtistInfoResponse getArtistInfo(Long userId) {
@@ -87,11 +86,9 @@ public class UserService {
     public AllUserInfo modifyUserInfo(User user, ModifyInfoRequest request) {
         User targetUser = userRepository.findByUserId(user.getUserId());
 
-        userMapper.updateUserFromDto(request, targetUser);
-        log.info("바뀐 bio {}" ,targetUser.getBio());
+        targetUser.updateUserInfo(request);
 
         userRepository.save(targetUser);
-        log.info("save 메서드 호출");
 
         User updateUser = userRepository.findByUserId(user.getUserId());
         return AllUserInfo.from(updateUser);

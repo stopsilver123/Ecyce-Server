@@ -54,6 +54,8 @@ dependencies {
 	/* json nullable */
 	implementation 'org.openapitools:jackson-databind-nullable:0.2.1'
 
+	/*S3*/
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 tasks.named('test') {

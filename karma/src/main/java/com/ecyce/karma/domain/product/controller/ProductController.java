@@ -2,6 +2,9 @@ package com.ecyce.karma.domain.product.controller;
 
 import com.ecyce.karma.domain.auth.customAnnotation.AuthUser;
 import com.ecyce.karma.domain.bookmark.service.BookmarkService;
+import com.ecyce.karma.domain.product.dto.request.ModifyOptionRequest;
+import com.ecyce.karma.domain.product.dto.request.ModifyProductRequest;
+import com.ecyce.karma.domain.product.dto.response.OptionResponse;
 import com.ecyce.karma.domain.product.dto.response.ProductDetailResponse;
 import com.ecyce.karma.domain.product.dto.request.ProductRequest;
 import com.ecyce.karma.domain.product.dto.response.ProductSimpleResponse;
@@ -55,12 +58,12 @@ public class ProductController {
     }
 
     /* 상품 수정 */
-//    @PatchMapping("/{productId}")
-//    public ResponseEntity<ProductDetailResponse> modifyProduct(@AuthUser User user ,@PathVariable("productId") Long productId , @RequestBody ProductRequest dto){
-//        ProductDetailResponse response = productService.modifyProduct(user , productId ,dto);
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(response);
-//    }
+    @PatchMapping("/{productId}")
+    public ResponseEntity<ProductDetailResponse> modifyProduct(@AuthUser User user ,@PathVariable("productId") Long productId , @RequestBody ModifyProductRequest dto){
+        ProductDetailResponse response = productService.modifyProduct(user , productId , dto);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(response);
+    }
 
     /* 북마크 등록 */
     @PostMapping("/{productId}/bookmark")
@@ -74,6 +77,21 @@ public class ProductController {
     public ResponseEntity<String> deleteBookmark(@AuthUser User user, @PathVariable("productId") Long productId) {
         bookmarkService.delete(productId, user.getUserId());
         return ResponseEntity.status(HttpStatus.OK).body("북마크가 삭제되었습니다.");
+    }
+
+
+    /* 상품 Option 정보 수정 */
+    @PatchMapping("/{productId}/option/{optionId}")
+    public ResponseEntity<OptionResponse> modifyOptions(@AuthUser User user , @PathVariable("productId") Long productId , @PathVariable("optionId") Long optionId , @RequestBody ModifyOptionRequest dto){
+       OptionResponse optionResponse = productService.modifyOptions(user , productId , optionId , dto);
+       return ResponseEntity.status(HttpStatus.OK).body(optionResponse);
+    }
+
+    /* 상품 삭제 */
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<String> deleteProduct(@AuthUser User user , @PathVariable("productId") Long productId){
+        productService.deleteProduct(user , productId);
+        return ResponseEntity.status(HttpStatus.OK).body("상품 정보가 삭제되었습니다.");
     }
 
     /* 상품 후기 목록 조회 */

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,34 +28,44 @@ public class ChatRoomService {
         User otherUser = userRepository.findByNickname(otherUserName)
                 .orElseThrow(() -> new IllegalArgumentException("INVALID_OTHER_USER_NAME"));
 
-        ChatRoom chatRoom = setupChatRoomWithRoles(creator, otherUser, isOtherUserBuyer);
+        // buyer와 seller 설정
+        User buyer = isOtherUserBuyer ? otherUser : creator;
+        User seller = isOtherUserBuyer ? creator : otherUser;
+
+        // 기존 채팅방 여부 확인
+        Optional<ChatRoom> existingChatRoom = chatRoomRepository.findByBuyerAndSeller(buyer, seller);
+        if (existingChatRoom.isPresent()) {
+            // 기존 채팅방 반환
+            return ChatRoomResponseDto.from(existingChatRoom.get(), false);
+        }
+
+        // 새 채팅방 생성
+        ChatRoom chatRoom = ChatRoom.builder()
+                .buyer(buyer)
+                .seller(seller)
+                .name(otherUser.getNickname())
+                .build();
         chatRoomRepository.save(chatRoom);
 
-        return ChatRoomResponseDto.from(chatRoom);
+        return ChatRoomResponseDto.from(chatRoom, true);
     }
 
     /* 전체 채팅방 목록: 사용자가 buyer 또는 seller로 참여한 채팅방 */
     public List<ChatRoomListDto> findAllChatRooms(User user) {
         List<ChatRoom> chatRooms = chatRoomRepository.findByBuyerOrSeller(user, user);
-        return chatRooms.stream()
-                .map(this::toChatRoomListDto)
-                .collect(Collectors.toList());
+        return mapToChatRoomListDto(chatRooms, user);
     }
 
-    /* 판매 채팅방 목록: 사용자가 buyer로 참여한 채팅방 */
+    /* 판매 채팅방 목록: 사용자가 seller로 참여한 채팅방 */
     public List<ChatRoomListDto> findSellingChatRooms(User user) {
-        List<ChatRoom> chatRooms = chatRoomRepository.findByBuyer(user);
-        return chatRooms.stream()
-                .map(this::toChatRoomListDto)
-                .collect(Collectors.toList());
+        List<ChatRoom> chatRooms = chatRoomRepository.findBySeller(user); // 판매자 기준
+        return mapToChatRoomListDto(chatRooms, user);
     }
 
-    /* 구매 채팅방 목록: 사용자가 seller로 참여한 채팅방 */
+    /* 구매 채팅방 목록: 사용자가 buyer로 참여한 채팅방 */
     public List<ChatRoomListDto> findBuyingChatRooms(User user) {
-        List<ChatRoom> chatRooms = chatRoomRepository.findBySeller(user);
-        return chatRooms.stream()
-                .map(this::toChatRoomListDto)
-                .collect(Collectors.toList());
+        List<ChatRoom> chatRooms = chatRoomRepository.findByBuyer(user); // 구매자 기준
+        return mapToChatRoomListDto(chatRooms, user);
     }
 
     /* 특정 채팅방의 상세 정보 조회 */
@@ -67,21 +78,13 @@ public class ChatRoomService {
                 .collect(Collectors.toList());
     }
 
-    // ChatRoom을 ChatRoomListDto로 변환
-    private ChatRoomListDto toChatRoomListDto(ChatRoom chatRoom) {
-        ChatMessage latestMessage = chatMessageRepository.findTopByChatRoomOrderByTimestampDesc(chatRoom);
-        return ChatRoomListDto.from(chatRoom, latestMessage);
-    }
-
-    // creator가 buyer인지 seller인지 판단
-    private ChatRoom setupChatRoomWithRoles(User creator, User otherUser, boolean isOtherUserBuyer) {
-        User buyer = isOtherUserBuyer ? creator : otherUser;
-        User seller = isOtherUserBuyer ? otherUser : creator;
-
-        return ChatRoom.builder()
-                .buyer(buyer)
-                .seller(seller)
-                .name(otherUser.getNickname())
-                .build();
+    /* ChatRoom을 ChatRoomListDto로 변환 */
+    private List<ChatRoomListDto> mapToChatRoomListDto(List<ChatRoom> chatRooms, User currentUser) {
+        return chatRooms.stream()
+                .map(chatRoom -> {
+                    ChatMessage latestMessage = chatMessageRepository.findTopByChatRoomOrderByTimestampDesc(chatRoom);
+                    return ChatRoomListDto.from(chatRoom, latestMessage, currentUser);
+                })
+                .collect(Collectors.toList());
     }
 }

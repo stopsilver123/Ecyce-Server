@@ -34,14 +34,18 @@ public class ChatMessageService {
     }
 
     @Transactional(readOnly = true)
-    public ChatListResponseDto findMessagesByRoomId(Long roomId) {
+    public ChatListResponseDto findMessagesByRoomId(Long roomId, User currentUser) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("INVALID_ROOM_ID"));
 
-        List<ChatMessageDto> messageDtos = chatMessageRepository.findByChatRoomRoomId(roomId).stream()
+        // 상대방 이름으로 방 이름 설정
+        String roomName = chatRoom.getBuyer().equals(currentUser) ? chatRoom.getSeller().getNickname() : chatRoom.getBuyer().getNickname();
+
+        List<ChatMessage> messages = chatMessageRepository.findByChatRoomOrderByTimestampAsc(chatRoom);
+        List<ChatMessageDto> messageDtos = messages.stream()
                 .map(ChatMessageDto::from)
                 .collect(Collectors.toList());
 
-        return ChatListResponseDto.of(chatRoom.getRoomId(), chatRoom.getName(), messageDtos);
+        return ChatListResponseDto.of(chatRoom.getRoomId(), roomName, messageDtos);
     }
 }

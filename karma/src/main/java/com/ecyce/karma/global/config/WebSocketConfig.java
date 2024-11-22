@@ -14,9 +14,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        //://localhost/ws/chat을 호출하면 웹 소켓 연결됨
         registry.addEndpoint("/ws") // /ws으로 들어오는 경우
-                .setAllowedOrigins("https://jiangxy.github.io", "http://localhost:3000")
+                .setAllowedOrigins("https://jiangxy.github.io", "http://localhost:3000", "https://api.ecyce-karma.n-e.kr", "ws://localhost:8080", "wss://api.ecyce-karma.n-e.kr")
                 .withSockJS();
     }
 

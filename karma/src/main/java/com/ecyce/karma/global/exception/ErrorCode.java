@@ -37,7 +37,15 @@ public enum ErrorCode {
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "리뷰가 존재하지 않습니다."),
     REVIEW_ACCESS_DENIED(HttpStatus.FORBIDDEN, "리뷰는 해당 주문의 구매자만 작성할 수 있습니다."),
     INVALID_REVIEW_STATE(HttpStatus.BAD_REQUEST, "리뷰는 '구매확정' 상태인 경우에만 작성할 수 있습니다."),
-    REVIEW_ALREADY_EXISTS(HttpStatus.CONFLICT, "해당 주문에 대해 이미 리뷰가 작성되었습니다.");
+    REVIEW_ALREADY_EXISTS(HttpStatus.CONFLICT, "해당 주문에 대해 이미 리뷰가 작성되었습니다."),
+
+    // s3
+    S3_FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "S3에서 파일을 찾을 수 없습니다."),
+    S3_BUCKET_MISMATCH(HttpStatus.BAD_REQUEST, "S3 버킷 이름이 일치하지 않습니다."),
+    S3_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "S3 파일 업로드 중 오류가 발생했습니다."),
+    S3_DELETE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "S3 파일 삭제 중 오류가 발생했습니다."),
+    INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST, "지원되지 않는 파일 확장자입니다."),
+    DUPLICATE_FILE(HttpStatus.BAD_REQUEST, "중복된 파일입니다.");
 
     private final HttpStatus status;
     private final String message;

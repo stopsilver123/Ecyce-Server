@@ -86,33 +86,32 @@ public class Product {
 
     /* 상품 정보 update */
     public void updateInfo(ModifyProductRequest dto) {
-        if(dto.getProductName().isPresent()){
+        if(dto.getProductName()!= null && dto.getProductName().isPresent()){
            this.productName = dto.getProductName().get();
         }
-        if(dto.getPrice().isPresent()){
+        if(dto.getPrice()!= null && dto.getPrice().isPresent()){
             this.price= dto.getPrice().get();
         }
-        if(dto.getContent().isPresent()){
+        if(dto.getContent()!= null && dto.getContent().isPresent()){
             this.content = dto.getContent().get();
         }
-        if(dto.getDuration().isPresent()){
+        if(dto.getDuration()!= null && dto.getDuration().isPresent()){
             this.duration = dto.getDuration().get();
         }
-        if(dto.getRating().isPresent()){
+        if(dto.getRating()!= null && dto.getRating().isPresent()){
             this.rating = dto.getRating().get();
         }
-        if(dto.getProductState().isPresent()){
+        if(dto.getProductState()!= null && dto.getProductState().isPresent()){
             this.productState = dto.getProductState().get();
         }
-        if (dto.getDeliveryFee().isPresent() && dto.getDeliveryFee().get() != null) {
+        if (dto.getDeliveryFee()!= null && dto.getDeliveryFee().isPresent()) {
             this.deliveryFee= dto.getDeliveryFee().get();
         }
-        if(dto.getMaterialInfo().isPresent()){
+        if(dto.getMaterialInfo()!= null && dto.getMaterialInfo().isPresent()){
             this.materialInfo = dto.getMaterialInfo().get();
         }
-        if(dto.getBuyerNotice().isPresent()){
+        if(dto.getBuyerNotice()!= null && dto.getBuyerNotice().isPresent()){
             this.buyerNotice = dto.getBuyerNotice().get();
         }
-
     }
 }

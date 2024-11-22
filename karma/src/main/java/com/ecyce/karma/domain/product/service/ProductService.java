@@ -122,7 +122,7 @@ public class ProductService {
             throw new CustomException(ErrorCode.INVALID_ACCESS);
         }
 
-
+        log.info("content : {}" , dto.getContent().get());
         product.updateInfo(dto);
 
         productRepository.save(product);

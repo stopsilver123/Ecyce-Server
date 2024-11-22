@@ -13,7 +13,6 @@ import com.ecyce.karma.domain.review.dto.ReviewDetailDto;
 import com.ecyce.karma.domain.review.service.ReviewService;
 import com.ecyce.karma.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

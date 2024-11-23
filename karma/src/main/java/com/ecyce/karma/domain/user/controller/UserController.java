@@ -5,6 +5,8 @@ import com.ecyce.karma.domain.bookmark.dto.BookmarkDto;
 import com.ecyce.karma.domain.bookmark.service.BookmarkService;
 import com.ecyce.karma.domain.product.dto.response.ProductSimpleResponse;
 import com.ecyce.karma.domain.product.service.ProductService;
+import com.ecyce.karma.domain.review.dto.ReviewResponseDto;
+import com.ecyce.karma.domain.review.service.ReviewService;
 import com.ecyce.karma.domain.user.dto.request.UserInfoRequest;
 import com.ecyce.karma.domain.user.dto.response.ArtistInfoResponse;
 import com.ecyce.karma.domain.user.dto.response.UserInfo;
@@ -24,6 +26,7 @@ public class UserController {
     private final BookmarkService bookmarkService;
     private final UserService userService;
     private final ProductService productService;
+    private final ReviewService reviewService;
 
     /* 회원별 북마크 상품 목록 조회 */
     @GetMapping("/users/bookmarks")
@@ -65,6 +68,14 @@ public class UserController {
         UserInfo userInfo = userService.saveNewUser(user,request);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userInfo);
+    }
+
+    /* 작가의 상품의 리뷰 목록 조회*/
+    @GetMapping("/artist/{userId}/review")
+    public ResponseEntity<?> getArtistReviews(@AuthUser User user){
+       List<ReviewResponseDto> reviewList = reviewService.getReviewListByArtist(user);
+       return ResponseEntity.status(HttpStatus.OK)
+               .body(reviewList);
     }
 
 

@@ -102,4 +102,11 @@ public class ProductController {
         return ResponseEntity.ok(reviews);
     }
 
+
+    /* 상품 검색 */
+    @GetMapping("/search")
+    public ResponseEntity<?> SearchAllByWord(@AuthUser User user ,@RequestParam(name ="word") String searchWord){
+        return productService.Search(user , searchWord);
+    }
+
 }

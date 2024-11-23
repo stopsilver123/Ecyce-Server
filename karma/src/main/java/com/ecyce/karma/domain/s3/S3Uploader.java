@@ -29,7 +29,7 @@ public class S3Uploader {
     private Set<String> uploadedFileNames = new HashSet<>();
     private Set<Long> uploadedFileSizes = new HashSet<>();
 
-    @Value("${cloud.aws.s3.bucket}")
+    @Value("${spring.cloud.aws.s3.bucket}")
     private String bucket;
 
     @Value("${spring.servlet.multipart.max-file-size}")

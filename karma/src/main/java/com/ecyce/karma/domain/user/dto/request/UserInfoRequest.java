@@ -6,8 +6,6 @@ public record UserInfoRequest(
         String phoneNumber,
         Long postalCode ,
         String address1,
-        String address2,
-        String address3
+        String address2
 ) {
-
 }

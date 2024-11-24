@@ -6,6 +6,8 @@ import com.ecyce.karma.domain.bookmark.service.BookmarkService;
 import com.ecyce.karma.domain.product.dto.response.ProductSimpleResponse;
 import com.ecyce.karma.domain.product.service.ProductService;
 import com.ecyce.karma.domain.user.dto.request.ModifyInfoRequest;
+import com.ecyce.karma.domain.review.dto.ReviewResponseDto;
+import com.ecyce.karma.domain.review.service.ReviewService;
 import com.ecyce.karma.domain.user.dto.request.UserInfoRequest;
 import com.ecyce.karma.domain.user.dto.response.AllUserInfo;
 import com.ecyce.karma.domain.user.dto.response.ArtistInfoResponse;

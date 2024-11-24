@@ -12,14 +12,12 @@ public record UserInfo(
         String phoneNumber,
         Long postalCode ,
         String address1,
-        String address2,
-        String address3
+        String address2
 
 ) {
 
    /* 주소는 처음 저장된 걸 불러옴 */
     public static UserInfo from(User user) {
-        Address firstAddress = user.getAddress().isEmpty() ? null : user.getAddress().get(0);
 
         return new UserInfo(
                 user.getUserId(),
@@ -27,10 +25,9 @@ public record UserInfo(
                 user.getNickname(),
                 user.getEmail(),
                 user.getPhoneNumber(),
-                firstAddress != null ? firstAddress.getPostalCode() : null,
-                firstAddress != null ? firstAddress.getAddress1() : null,
-                firstAddress != null ? firstAddress.getAddress2() : null,
-                firstAddress != null ? firstAddress.getAddress3() : null
+                user.getAddress() != null ? user.getAddress().getPostalCode() : null,
+                user.getAddress() != null ? user.getAddress().getAddress1() : null,
+                user.getAddress() != null ? user.getAddress().getAddress2() : null
         );
     }
 

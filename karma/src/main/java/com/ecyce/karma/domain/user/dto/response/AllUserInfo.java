@@ -13,12 +13,11 @@ public record AllUserInfo(
         String phoneNumber,
         Long postalCode ,
         String address1,
-        String address2,
-        String address3
+        String address2
+
 ) {
 
     public static AllUserInfo from(User user) {
-        Address firstAddress = user.getAddress().isEmpty() ? null : user.getAddress().get(0);
 
         return new AllUserInfo(
                 user.getUserId(),
@@ -27,10 +26,9 @@ public record AllUserInfo(
                 user.getBio(),
                 user.getEmail(),
                 user.getPhoneNumber(),
-                firstAddress != null ? firstAddress.getPostalCode() : null,
-                firstAddress != null ? firstAddress.getAddress1() : null,
-                firstAddress != null ? firstAddress.getAddress2() : null,
-                firstAddress != null ? firstAddress.getAddress3() : null
+                user.getAddress() != null ? user.getAddress().getPostalCode() : null,
+                user.getAddress() != null ? user.getAddress().getAddress1() : null,
+                user.getAddress() != null ? user.getAddress().getAddress2() : null
         );
     }
 

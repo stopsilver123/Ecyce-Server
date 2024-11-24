@@ -17,6 +17,9 @@ import com.ecyce.karma.global.exception.CustomException;
 import com.ecyce.karma.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -157,5 +160,12 @@ public class ProductService {
         return  product;
     }
 
+    /* 상품 검색 */
+    public ResponseEntity<?> Search(User user, String searchWord) {
+        List<Product> productList = productRepository.findByProductName(searchWord);
 
+        List<ProductSimpleResponse> productSimpleResponseList = getProductSimpleResponses(user, productList);
+
+        return ResponseEntity.status(HttpStatus.OK).body(productSimpleResponseList);
+    }
 }

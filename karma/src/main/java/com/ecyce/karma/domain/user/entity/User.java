@@ -5,12 +5,11 @@ import com.ecyce.karma.domain.bookmark.entity.Bookmark;
 import com.ecyce.karma.domain.notice.entity.Notice;
 import com.ecyce.karma.domain.order.entity.Orders;
 import com.ecyce.karma.domain.product.entity.Product;
+import com.ecyce.karma.domain.user.dto.request.ModifyInfoRequest;
 import com.ecyce.karma.domain.user.dto.request.UserInfoRequest;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +74,7 @@ public class User {
         this.address = addressList;
     }
 
-    // 액세스 토큰 업데이트
+    /* 액세스 토큰 업데이트 */
     public void updateKakaoAccessToken(String kakaoAccessToken) {
         this.kakaoAccessToken = kakaoAccessToken;
     }
@@ -95,5 +94,24 @@ public class User {
         this.address.add(newAddress);
 
     }
+
+    /* 회원 정보 수정 메서드 */
+    public void updateUserInfo(ModifyInfoRequest request) {
+        if (request.name() != null && request.name().isPresent()) {
+            this.name = request.name().get();
+        }
+        if (request.nickname() != null && request.nickname().isPresent()) {
+            this.nickname = request.nickname().get();
+        }
+        if (request.bio() != null &&request.bio().isPresent()) {
+            this.bio = request.bio().get();
+        }
+        if (request.phoneNumber() != null &&request.phoneNumber().isPresent()) {
+            this.phoneNumber = request.phoneNumber().get();
+        }
+
+    }
+
+
 }
 

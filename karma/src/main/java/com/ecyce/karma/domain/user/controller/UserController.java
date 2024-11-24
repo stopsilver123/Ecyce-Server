@@ -5,7 +5,9 @@ import com.ecyce.karma.domain.bookmark.dto.BookmarkDto;
 import com.ecyce.karma.domain.bookmark.service.BookmarkService;
 import com.ecyce.karma.domain.product.dto.response.ProductSimpleResponse;
 import com.ecyce.karma.domain.product.service.ProductService;
+import com.ecyce.karma.domain.user.dto.request.ModifyInfoRequest;
 import com.ecyce.karma.domain.user.dto.request.UserInfoRequest;
+import com.ecyce.karma.domain.user.dto.response.AllUserInfo;
 import com.ecyce.karma.domain.user.dto.response.ArtistInfoResponse;
 import com.ecyce.karma.domain.user.dto.response.UserInfo;
 import com.ecyce.karma.domain.user.entity.User;
@@ -66,6 +68,15 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userInfo);
     }
+
+    /* 사용자 정보 수정 */
+    @PatchMapping("/user")
+    public ResponseEntity<AllUserInfo> modifyUserInfo(@AuthUser User user , @RequestBody ModifyInfoRequest request){
+        AllUserInfo allUserInfo = userService.modifyUserInfo(user , request);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(allUserInfo);
+    }
+
 
 
 

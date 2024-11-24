@@ -19,33 +19,30 @@ public class Address{
     private Long addressId;
 
     @Column(nullable = false)
-    private String address1; // 도시
+    private String address1; // 도시 , 구
 
     @Column(nullable = false)
-    private String address2; // 구
+    private String address2; // 건물
 
     @Column(nullable = false)
-    private String address3; // 건물
-    @Column(nullable = false)
-    private Long postalCode; //우편번호
+    private Long postalCode; // 우편번호
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "userId" ,updatable = false, nullable = false)
     private User user;
 
     @Builder
-    public Address(User user , String address1 , String address2 , String address3 , Long postalCode){
+    public Address(User user , String address1 , String address2 , Long postalCode){
         this.user = user;
         this.address1 = address1;
         this.address2 = address2;
-        this.address3 = address3;
         this.postalCode = postalCode;
     }
 
     // 주소 형식 포맷팅
     @Override
     public String toString() {
-        return String.format("[%d] %s %s %s", postalCode, address1, address2, address3);
+        return String.format("[%d] %s %s", postalCode, address1, address2);
     }
 
     public static Address toEntity(User user , UserInfoRequest request){
@@ -54,7 +51,6 @@ public class Address{
                 .postalCode(request.postalCode())
                 .address1(request.address1())
                 .address2(request.address2())
-                .address3(request.address3())
                 .build();
     }
 

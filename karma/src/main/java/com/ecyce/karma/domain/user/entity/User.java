@@ -5,12 +5,11 @@ import com.ecyce.karma.domain.bookmark.entity.Bookmark;
 import com.ecyce.karma.domain.notice.entity.Notice;
 import com.ecyce.karma.domain.order.entity.Orders;
 import com.ecyce.karma.domain.product.entity.Product;
+import com.ecyce.karma.domain.user.dto.request.ModifyInfoRequest;
 import com.ecyce.karma.domain.user.dto.request.UserInfoRequest;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,21 +60,21 @@ public class User {
     @OneToMany(mappedBy = "buyerUser", cascade = CascadeType.ALL, orphanRemoval = true)
      List<Orders> userAsBuyer = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    List<Address> address = new ArrayList<>();
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    Address address;
 
     @Builder
-    public  User(String nickname , String email , String profileImage , String phoneNumber , String bio , String kakaoAccessToken, List<Address> addressList){
+    public  User(String nickname , String email , String profileImage , String phoneNumber , String bio , String kakaoAccessToken, Address address){
         this.nickname = nickname;
         this.email  = email;
         this.profileImage = profileImage;
         this.phoneNumber = phoneNumber;
         this.bio = bio;
         this.kakaoAccessToken = kakaoAccessToken;
-        this.address = addressList;
+        this.address = address;
     }
 
-    // 액세스 토큰 업데이트
+    /* 액세스 토큰 업데이트 */
     public void updateKakaoAccessToken(String kakaoAccessToken) {
         this.kakaoAccessToken = kakaoAccessToken;
     }
@@ -89,11 +88,27 @@ public class User {
                 .postalCode(userInfoRequest.postalCode())
                 .address1(userInfoRequest.address1())
                 .address2(userInfoRequest.address2())
-                .address3(userInfoRequest.address3())
                 .build();
         newAddress.setUser(user);
-        this.address.add(newAddress);
+    }
+
+    /* 회원 정보 수정 메서드 */
+    public void updateUserInfo(ModifyInfoRequest request) {
+        if (request.name() != null && request.name().isPresent()) {
+            this.name = request.name().get();
+        }
+        if (request.nickname() != null && request.nickname().isPresent()) {
+            this.nickname = request.nickname().get();
+        }
+        if (request.bio() != null &&request.bio().isPresent()) {
+            this.bio = request.bio().get();
+        }
+        if (request.phoneNumber() != null &&request.phoneNumber().isPresent()) {
+            this.phoneNumber = request.phoneNumber().get();
+        }
 
     }
+
+
 }
 

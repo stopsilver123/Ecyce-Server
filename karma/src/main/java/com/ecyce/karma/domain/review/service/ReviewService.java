@@ -3,6 +3,8 @@ package com.ecyce.karma.domain.review.service;
 import com.ecyce.karma.domain.order.entity.OrderState;
 import com.ecyce.karma.domain.order.entity.Orders;
 import com.ecyce.karma.domain.order.repository.OrdersRepository;
+import com.ecyce.karma.domain.product.entity.Product;
+import com.ecyce.karma.domain.product.repository.ProductRepository;
 import com.ecyce.karma.domain.review.dto.ReviewDetailDto;
 import com.ecyce.karma.domain.review.dto.ReviewRequestDto;
 import com.ecyce.karma.domain.review.dto.ReviewResponseDto;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final OrdersRepository ordersRepository;
+    private final ProductRepository productRepository;
 
     /* 리뷰 생성 */
     public ReviewResponseDto create(User user, ReviewRequestDto requestDto) {
@@ -85,6 +88,7 @@ public class ReviewService {
                 .map(ReviewDetailDto::from)
                 .collect(Collectors.toList());
     }
+  
     /* 리뷰 삭제 */
     public void delete(User user, Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
@@ -95,5 +99,25 @@ public class ReviewService {
         }
 
         reviewRepository.delete(review);
+    }
+
+    /* 작가 작품의 리뷰 리스트 조회 */
+    public List<ReviewResponseDto> getReviewListByArtist(User user) {
+        // 작가의 작품 list
+        List<Product> productList = productRepository.findByUserId(user.getUserId());
+        // 작품의 주문 list
+        List<Orders> ordersList = productList.stream()
+                .flatMap(product -> ordersRepository.findByProductId(product.getProductId()).stream())
+                .collect(Collectors.toList());
+        // 주문들의 리뷰 리스트
+        List<Review> reviewList = ordersList.stream()
+                .flatMap(orders -> reviewRepository.findByOrderId(orders.getOrderId()).stream())
+                .collect(Collectors.toList());
+
+        List<ReviewResponseDto> reviewResponseDtoList = reviewList.stream()
+                .map(review -> ReviewResponseDto.from(review))
+                .collect(Collectors.toList());
+
+        return reviewResponseDtoList;
     }
 }

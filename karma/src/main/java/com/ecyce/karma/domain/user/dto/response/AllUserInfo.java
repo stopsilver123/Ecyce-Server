@@ -1,13 +1,14 @@
 package com.ecyce.karma.domain.user.dto.response;
 
 import com.ecyce.karma.domain.address.entity.Address;
-import com.ecyce.karma.domain.user.dto.request.UserInfoRequest;
 import com.ecyce.karma.domain.user.entity.User;
 
-public record UserInfo(
+public record AllUserInfo(
+
         Long userId ,
         String name,
         String nickname,
+        String bio,
         String email ,
         String phoneNumber,
         Long postalCode ,
@@ -16,13 +17,13 @@ public record UserInfo(
 
 ) {
 
-   /* 주소는 처음 저장된 걸 불러옴 */
-    public static UserInfo from(User user) {
+    public static AllUserInfo from(User user) {
 
-        return new UserInfo(
+        return new AllUserInfo(
                 user.getUserId(),
                 user.getName(),
                 user.getNickname(),
+                user.getBio(),
                 user.getEmail(),
                 user.getPhoneNumber(),
                 user.getAddress() != null ? user.getAddress().getPostalCode() : null,
@@ -30,6 +31,5 @@ public record UserInfo(
                 user.getAddress() != null ? user.getAddress().getAddress2() : null
         );
     }
-
 
 }

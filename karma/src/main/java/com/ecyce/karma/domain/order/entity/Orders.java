@@ -4,15 +4,12 @@ import com.ecyce.karma.domain.pay.entity.Pay;
 import com.ecyce.karma.domain.pay.entity.PayStatus;
 import com.ecyce.karma.domain.product.entity.Product;
 import com.ecyce.karma.domain.product.entity.ProductOption;
-import com.ecyce.karma.domain.review.entity.Review;
 import com.ecyce.karma.domain.user.entity.User;
 import com.ecyce.karma.global.entity.BaseTimeEntity;
 import com.ecyce.karma.global.exception.CustomException;
 import com.ecyce.karma.global.exception.ErrorCode;
 import jakarta.persistence.*;
-import jdk.jshell.Snippet.Status;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -55,9 +52,6 @@ public class Orders extends BaseTimeEntity {
 
     @OneToOne(mappedBy = "orders" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Pay pay;
-
-    @OneToOne(mappedBy = "orders" , cascade = CascadeType.ALL, orphanRemoval = true)
-    private Review review;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productOptionId", nullable = false)

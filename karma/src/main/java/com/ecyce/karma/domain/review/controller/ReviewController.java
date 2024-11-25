@@ -32,4 +32,10 @@ public class ReviewController {
     }
 
     /* 후기 삭제 */
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<String> deleteReview(@AuthUser User user, @PathVariable("reviewId") Long reviewId) {
+        reviewService.delete(user, reviewId);
+        return ResponseEntity.ok("후기가 성공적으로 삭제되었습니다.");
+    }
+
 }

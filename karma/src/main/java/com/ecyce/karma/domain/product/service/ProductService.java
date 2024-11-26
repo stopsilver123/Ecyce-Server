@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,8 +55,8 @@ public class ProductService {
         Product product = ProductRequest.toEntity(user , dto);
         productRepository.save(product);
         // 옵션이 있다면
-        if (dto.getOption() != null) {
-            for (OptionRequest optionDto : dto.getOption()) {
+        if (dto.getOptions() != null) {
+            for (OptionRequest optionDto : dto.getOptions()) {
                 ProductOption productOption = optionDto.toEntity(product , optionDto);
                 productOptionRepository.save(productOption);
             }

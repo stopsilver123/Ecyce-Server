@@ -109,4 +109,10 @@ public class ProductController {
         return productService.Search(user , searchWord);
     }
 
+    /* 카테고리별 조회 */
+    @GetMapping("/category")
+    public ResponseEntity<?> categorySort(@AuthUser User user , @RequestParam(name ="code") Long category){
+        return productService.categorySort(user , category);
+    }
+
 }

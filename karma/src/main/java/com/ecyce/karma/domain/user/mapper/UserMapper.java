@@ -9,17 +9,15 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.openapitools.jackson.nullable.JsonNullable;
 
-@Mapper(uses = JsonNullableMapper.class ,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        componentModel = "spring"
-)
-public interface UserMapper {
-
-    @Mapping(target = "name", qualifiedByName = "unwrap")
-    @Mapping(target = "nickname", qualifiedByName = "unwrap")
-    @Mapping(target = "bio", qualifiedByName = "unwrap")
-    @Mapping(target = "phoneNumber", qualifiedByName = "unwrap")
-    void update(ModifyInfoRequest entity, @MappingTarget User destination);
-
-
-}
+//@Mapper(uses = JsonNullableMapper.class ,
+//        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+//        componentModel = "spring"
+//)
+//public interface UserMapper {
+//
+//    @Mapping(target = "name", expression = "java(jsonNullableMapper.unwrap(entity.name(), destination.getName()))")
+//    @Mapping(target = "nickname", expression = "java(jsonNullableMapper.unwrap(entity.nickname(), destination.getNickname()))")
+//    @Mapping(target = "bio", expression = "java(jsonNullableMapper.unwrap(entity.bio(), destination.getBio()))")
+//    @Mapping(target = "phoneNumber", expression = "java(jsonNullableMapper.unwrap(entity.phoneNumber(), destination.getPhoneNumber()))")
+//    void update(ModifyInfoRequest entity, @MappingTarget User destination);
+//}

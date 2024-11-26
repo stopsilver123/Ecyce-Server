@@ -11,9 +11,15 @@ public interface JsonNullableMapper {
     default <T> JsonNullable<T> wrap(T entity) {
         return JsonNullable.of(entity);
     }
+
     @Named("unwrap")
-    default <T> T unwrap(JsonNullable<T> jsonNullable) {
-        return jsonNullable == null ? null : jsonNullable.orElse(null);
+    default <T> T unwrap(JsonNullable<T> jsonNullable, T currentValue) {
+        // JsonNullable이 null인 경우 기존 값 유지
+        if (jsonNullable == null) {
+            return currentValue;
+        }
+        // JsonNullable 값이 비어 있으면 기존 값 유지
+        return jsonNullable.orElse(currentValue);
     }
 
     /**

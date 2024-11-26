@@ -15,7 +15,6 @@ import com.ecyce.karma.domain.user.dto.response.AllUserInfo;
 import com.ecyce.karma.domain.user.dto.response.ArtistInfoResponse;
 import com.ecyce.karma.domain.user.dto.response.UserInfo;
 import com.ecyce.karma.domain.user.entity.User;
-import com.ecyce.karma.domain.user.mapper.UserMapper;
 import com.ecyce.karma.domain.user.repository.UserRepository;
 import com.ecyce.karma.global.exception.CustomException;
 import com.ecyce.karma.global.exception.ErrorCode;
@@ -38,7 +37,7 @@ public class UserService {
     private final OrdersRepository ordersRepository;
     private final ReviewRepository reviewRepository;
     private final AddressRepository addressRepository;
-    private final UserMapper userMapper;
+//    private final UserMapper userMapper;
 
     /* 작가 정보 반환 */
     public ArtistInfoResponse getArtistInfo(Long userId) {
@@ -91,30 +90,30 @@ public class UserService {
     }
 
     /* 사용자 정보 수정 */
-//    public AllUserInfo modifyUserInfo(User user, ModifyInfoRequest request) {
-//        User targetUser = userRepository.findByUserId(user.getUserId());
-//
-//        targetUser.updateUserInfo(request);
-//
-//        userRepository.save(targetUser); // 기존값 유지하도록 수정해야함
-//
-//        User updateUser = userRepository.findByUserId(user.getUserId());
-//        return AllUserInfo.from(updateUser);
-//    }
-
     public AllUserInfo modifyUserInfo(User user, ModifyInfoRequest request) {
-        // 데이터베이스에서 기존 사용자 정보 조회
         User targetUser = userRepository.findByUserId(user.getUserId());
 
-        // MapStruct를 사용해 요청 값을 기존 사용자 객체에 업데이트
-        userMapper.update(request, targetUser);
+        targetUser.updateUserInfo(request);
 
-        // 업데이트된 사용자 정보 저장
-        userRepository.save(targetUser);
+        userRepository.save(targetUser); // 기존값 유지하도록 수정해야함
 
-        // 갱신된 사용자 정보를 반환
-        return AllUserInfo.from(targetUser);
+        User updateUser = userRepository.findByUserId(user.getUserId());
+        return AllUserInfo.from(updateUser);
     }
+
+//    public AllUserInfo modifyUserInfo(User user, ModifyInfoRequest request) {
+//        // 데이터베이스에서 기존 사용자 정보 조회
+//        User targetUser = userRepository.findByUserId(user.getUserId());
+//
+//        // MapStruct를 사용해 요청 값을 기존 사용자 객체에 업데이트
+//        userMapper.update(request, targetUser);
+//
+//        // 업데이트된 사용자 정보 저장
+//        userRepository.save(targetUser);
+//
+//        // 갱신된 사용자 정보를 반환
+//        return AllUserInfo.from(targetUser);
+//    }
 
     /* 사용자 주소 수정 */
     public UserInfo modifyAddress(User user, ModifyAddressRequest request) {

@@ -39,6 +39,9 @@ public class Orders extends BaseTimeEntity {
     private Integer orderCount;
 
     @Column
+    private String deliveryCompany; // 택배회사
+
+    @Column
     private String invoiceNumber; // 송장번호
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -110,13 +113,14 @@ public class Orders extends BaseTimeEntity {
     }
 
     // 4. 배송 시작 (송장번호 추가)
-    public void startShipping(String invoiceNumber) {
+    public void startShipping(String deliveryCompany, String invoiceNumber) {
         if (orderState != OrderState.제작완료) {
             throw new CustomException(ErrorCode.INVALID_ORDER_STATE, String.format("현재 상태는 '%s'이며, 제작 완료 상태에서만 배송을 시작할 수 있습니다.", orderState));
         }
         if (invoiceNumber == null || invoiceNumber.isBlank()) {
             throw new CustomException(ErrorCode.INVOICE_NUMBER_REQUIRED);
         }
+        this.deliveryCompany = deliveryCompany;
         this.invoiceNumber = invoiceNumber;
         this.orderState = OrderState.배송중;
     }

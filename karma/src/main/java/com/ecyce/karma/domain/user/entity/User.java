@@ -9,6 +9,7 @@ import com.ecyce.karma.domain.user.dto.request.ModifyInfoRequest;
 import com.ecyce.karma.domain.user.dto.request.UserInfoRequest;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
@@ -93,22 +95,35 @@ public class User {
     }
 
     /* 회원 정보 수정 메서드 */
-    public void updateUserInfo(ModifyInfoRequest request) {
-        if (request.name() != null && request.name().isPresent()) {
-            this.name = request.name().get();
-        }
-        if (request.nickname() != null && request.nickname().isPresent()) {
-            this.nickname = request.nickname().get();
-        }
-        if (request.bio() != null &&request.bio().isPresent()) {
-            this.bio = request.bio().get();
-        }
-        if (request.phoneNumber() != null &&request.phoneNumber().isPresent()) {
-            this.phoneNumber = request.phoneNumber().get();
-        }
+//    public void updateUserInfo(ModifyInfoRequest request) {
+//        if (request.name() != null && request.name().isPresent()) {
+//            log.info("name null인가 {}" , request.name());
+//            this.name = request.name().get();
+//        }
+//        if (request.nickname() != null && request.nickname().isPresent()) {
+//            this.nickname = request.nickname().get();
+//        }
+//        if (request.bio() != null &&request.bio().isPresent()) {
+//            this.bio = request.bio().get();
+//        }
+//        if (request.phoneNumber() != null &&request.phoneNumber().isPresent()) {
+//            this.phoneNumber = request.phoneNumber().get();
+//        }
+//
+//    }
 
+
+    public void setName(String name) {
+        this.name = name;
     }
-
-
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
 

@@ -11,7 +11,7 @@ public record AllUserInfo(
         String bio,
         String email ,
         String phoneNumber,
-        Long postalCode ,
+        String postalCode ,
         String address1,
         String address2
 

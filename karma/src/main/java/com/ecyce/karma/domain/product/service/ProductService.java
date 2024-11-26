@@ -56,8 +56,8 @@ public class ProductService {
         Product product = ProductRequest.toEntity(user , dto);
         productRepository.save(product);
         // 옵션이 있다면
-        if (dto.getOptions() != null) {
-            for (OptionRequest optionDto : dto.getOptions()) {
+        if (dto.getOption() != null) {
+            for (OptionRequest optionDto : dto.getOption()) {
                 ProductOption productOption = optionDto.toEntity(product , optionDto);
                 productOptionRepository.save(productOption);
             }

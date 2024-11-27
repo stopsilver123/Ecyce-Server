@@ -3,6 +3,8 @@ package com.ecyce.karma.global.handler;
 import com.ecyce.karma.domain.auth.jwt.JwtService;
 import com.ecyce.karma.global.exception.CustomException;
 import com.ecyce.karma.global.exception.ErrorCode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -40,10 +42,35 @@ public class StompHandler implements ChannelInterceptor {
             }
 
             Long userId = jwtService.extractUserId(accessToken);
+
+            if (accessor.getCommand() == StompCommand.SEND) {
+                validateMessageUserId(message, userId);
+            }
+
             log.info("인증된 userId: {}", userId);
         }
         return message;
     }
+
+    // 채팅 메시지의 userId와 토큰 userId 일치 여부 확인
+    private void validateMessageUserId(Message<?> message, Long userId) {
+        try {
+            String payload = new String((byte[]) message.getPayload());
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(payload);
+
+            Long messageUserId = jsonNode.get("userId").asLong();
+
+            if (!userId.equals(messageUserId)) {
+                log.error("Unauthorized: 토큰의 userId와 메시지 송신자의 userId가 일치하지 않습니다.");
+                throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
+            }
+        } catch (Exception e) {
+            log.error("메시지 검증 중 오류 발생: {}", e.getMessage());
+            throw new CustomException(ErrorCode.INVALID_MESSAGE_PAYLOAD);
+        }
+    }
+
 
     private void handleInvalidToken(String validation) {
         switch (validation) {

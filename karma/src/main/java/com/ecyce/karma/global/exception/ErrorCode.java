@@ -26,7 +26,9 @@ public enum ErrorCode {
     BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "북마크가 존재하지 않습니다. 북마크를 등록한 후 취소할 수 있습니다."),
 
     // chat
-    INVALID_AUTHORIZATION_HEADER(HttpStatus.BAD_REQUEST, "헤더가 없거나 형식이 유효하지 않습니다.");
+    INVALID_AUTHORIZATION_HEADER(HttpStatus.BAD_REQUEST, "헤더가 없거나 형식이 유효하지 않습니다."),
+    UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "토큰의 userId와 메시지 송신자의 userId가 일치하지 않습니다."),
+    INVALID_MESSAGE_PAYLOAD(HttpStatus.BAD_REQUEST, "메시지 검증 중 오류 발생");
 
 
     private final HttpStatus status;

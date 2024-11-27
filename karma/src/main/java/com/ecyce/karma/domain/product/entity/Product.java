@@ -2,7 +2,9 @@ package com.ecyce.karma.domain.product.entity;
 
 import com.ecyce.karma.domain.bookmark.entity.Bookmark;
 import com.ecyce.karma.domain.order.entity.Orders;
+import com.ecyce.karma.domain.product.dto.request.ModifyProductRequest;
 import com.ecyce.karma.domain.user.entity.User;
+import com.ecyce.karma.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,7 +17,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Product {
+public class Product extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,9 +53,8 @@ public class Product {
     @Column
     private String materialInfo; // 소재의 정보
 
-
 //    @Column
-//    private String materialInfo; // 소재의 정보
+//    private String materialExample; // 소재의 정보
 
     @Column
     private String buyerNotice; // 구매자 안내사항
@@ -70,7 +71,7 @@ public class Product {
 
     @Builder
     public Product(User user , String productName , int price , String content , int duration , int rating , ProductState productState,
-    int deliveryFee , String materialInfo, String buyerNotice){
+    Integer deliveryFee , String materialInfo, String buyerNotice){
         this.user = user;
         this.productName = productName;
         this.price = price;
@@ -83,8 +84,34 @@ public class Product {
         this.buyerNotice = buyerNotice;
     }
 
-
-
-
-
+    /* 상품 정보 update */
+    public void updateInfo(ModifyProductRequest dto) {
+        if(dto.getProductName()!= null && dto.getProductName().isPresent()){
+           this.productName = dto.getProductName().get();
+        }
+        if(dto.getPrice()!= null && dto.getPrice().isPresent()){
+            this.price= dto.getPrice().get();
+        }
+        if(dto.getContent()!= null && dto.getContent().isPresent()){
+            this.content = dto.getContent().get();
+        }
+        if(dto.getDuration()!= null && dto.getDuration().isPresent()){
+            this.duration = dto.getDuration().get();
+        }
+        if(dto.getRating()!= null && dto.getRating().isPresent()){
+            this.rating = dto.getRating().get();
+        }
+        if(dto.getProductState()!= null && dto.getProductState().isPresent()){
+            this.productState = dto.getProductState().get();
+        }
+        if (dto.getDeliveryFee()!= null && dto.getDeliveryFee().isPresent()) {
+            this.deliveryFee= dto.getDeliveryFee().get();
+        }
+        if(dto.getMaterialInfo()!= null && dto.getMaterialInfo().isPresent()){
+            this.materialInfo = dto.getMaterialInfo().get();
+        }
+        if(dto.getBuyerNotice()!= null && dto.getBuyerNotice().isPresent()){
+            this.buyerNotice = dto.getBuyerNotice().get();
+        }
+    }
 }

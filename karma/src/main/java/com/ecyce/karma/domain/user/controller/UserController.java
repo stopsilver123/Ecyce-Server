@@ -5,16 +5,19 @@ import com.ecyce.karma.domain.bookmark.dto.BookmarkDto;
 import com.ecyce.karma.domain.bookmark.service.BookmarkService;
 import com.ecyce.karma.domain.product.dto.response.ProductSimpleResponse;
 import com.ecyce.karma.domain.product.service.ProductService;
+import com.ecyce.karma.domain.user.dto.request.ModifyInfoRequest;
+import com.ecyce.karma.domain.review.dto.ReviewResponseDto;
+import com.ecyce.karma.domain.review.service.ReviewService;
+import com.ecyce.karma.domain.user.dto.request.UserInfoRequest;
+import com.ecyce.karma.domain.user.dto.response.AllUserInfo;
 import com.ecyce.karma.domain.user.dto.response.ArtistInfoResponse;
+import com.ecyce.karma.domain.user.dto.response.UserInfo;
 import com.ecyce.karma.domain.user.entity.User;
 import com.ecyce.karma.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,5 +56,30 @@ public class UserController {
     }
 
     /* 회원 조회 */
+    @GetMapping("/user")
+    public ResponseEntity<UserInfo> getUserInfo(@AuthUser User user){
+        UserInfo userInfo = userService.getUserInfo(user);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(userInfo);
+    }
+
+    /* 처음 가입한 사용자인 경우 , 개인 정보 저장*/
+    @PostMapping("/user")
+    public ResponseEntity<UserInfo> saveNewUserInfo(@AuthUser User user , @RequestBody UserInfoRequest request){
+        UserInfo userInfo = userService.saveNewUser(user,request);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(userInfo);
+    }
+
+    /* 사용자 정보 수정 */
+    @PatchMapping("/user")
+    public ResponseEntity<AllUserInfo> modifyUserInfo(@AuthUser User user , @RequestBody ModifyInfoRequest request){
+        AllUserInfo allUserInfo = userService.modifyUserInfo(user , request);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(allUserInfo);
+    }
+
+
+
 
 }

@@ -21,7 +21,7 @@ public class ProductRequest {
     private Integer deliveryFee; // 배송비
     private String materialInfo; // 소재의 정보
     private String buyerNotice; // 구매자 안내사항
-    private List<OptionRequest> option;
+    private List<OptionRequest> options;
 
     public ProductRequest(String productName , int price , String content , int duration , ProductState productState ,
                           Integer deliveryFee , String materialInfo , String buyerNotice,
@@ -34,7 +34,7 @@ public class ProductRequest {
        this.deliveryFee = deliveryFee;
        this.materialInfo = materialInfo;
        this.buyerNotice = buyerNotice;
-       this.option = optionRequest;
+       this.options = optionRequest;
    }
 
    public static Product toEntity(User user  , ProductRequest requestDto){

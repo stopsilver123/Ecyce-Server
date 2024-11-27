@@ -4,6 +4,7 @@ import com.ecyce.karma.domain.auth.customAnnotation.AuthUser;
 import com.ecyce.karma.domain.bookmark.service.BookmarkService;
 import com.ecyce.karma.domain.product.dto.request.ModifyOptionRequest;
 import com.ecyce.karma.domain.product.dto.request.ModifyProductRequest;
+import com.ecyce.karma.domain.product.dto.request.OptionRequest;
 import com.ecyce.karma.domain.product.dto.response.OptionResponse;
 import com.ecyce.karma.domain.product.dto.response.ProductDetailResponse;
 import com.ecyce.karma.domain.product.dto.request.ProductRequest;
@@ -108,5 +109,25 @@ public class ProductController {
     public ResponseEntity<?> SearchAllByWord(@AuthUser User user ,@RequestParam(name ="word") String searchWord){
         return productService.Search(user , searchWord);
     }
+
+    /* 카테고리별 조회 */
+    @GetMapping("/category")
+    public ResponseEntity<?> categorySort(@AuthUser User user , @RequestParam(name ="code") Long category){
+        return productService.categorySort(user , category);
+    }
+
+    /* 옵션 삭제 */
+    @DeleteMapping("/{productId}/option/{optionId}")
+    public String deleteOption(@AuthUser User user ,@PathVariable("productId") Long productId , @PathVariable("optionId") Long optionId){
+        productService.deleteOption(user , productId , optionId);
+        return "삭제되었습니다.";
+    }
+
+    /* 옵션 추가 */
+    @PostMapping("/{productId}/option")
+    public ResponseEntity<OptionResponse> addOption(@AuthUser User user , @PathVariable("productId") Long productId , @RequestBody OptionRequest request){
+        return productService.addOption(user , productId , request);
+    }
+
 
 }

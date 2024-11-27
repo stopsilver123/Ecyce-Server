@@ -4,6 +4,7 @@ import com.ecyce.karma.domain.bookmark.entity.Bookmark;
 import com.ecyce.karma.domain.order.entity.Orders;
 import com.ecyce.karma.domain.product.dto.request.ModifyProductRequest;
 import com.ecyce.karma.domain.user.entity.User;
+import com.ecyce.karma.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,7 +17,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Product {
+public class Product extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

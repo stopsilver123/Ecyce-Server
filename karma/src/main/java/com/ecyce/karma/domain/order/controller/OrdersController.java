@@ -83,10 +83,11 @@ public class OrdersController {
     @PatchMapping("/{orderId}/ship")
     public ResponseEntity<String> startShipping(
             @PathVariable Long orderId,
+            @RequestParam String deliveryCompany,
             @RequestParam String invoiceNumber,
             @AuthUser User seller
     ) {
-        ordersService.startShipping(orderId, seller, invoiceNumber);
+        ordersService.startShipping(orderId, seller, deliveryCompany,invoiceNumber);
         return ResponseEntity.ok("배송이 시작되었습니다.");
     }
 

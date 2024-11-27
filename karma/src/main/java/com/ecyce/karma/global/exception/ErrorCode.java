@@ -23,7 +23,11 @@ public enum ErrorCode {
     INVALID_ACCESS(HttpStatus.BAD_REQUEST , "해당 사용자는 제품 정보를 수정할 수 없습니다."),
 
     // bookmark
-    BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "북마크가 존재하지 않습니다. 북마크를 등록한 후 취소할 수 있습니다.");
+    BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "북마크가 존재하지 않습니다. 북마크를 등록한 후 취소할 수 있습니다."),
+
+    // chat
+    INVALID_AUTHORIZATION_HEADER(HttpStatus.BAD_REQUEST, "헤더가 없거나 형식이 유효하지 않습니다.");
+
 
     private final HttpStatus status;
     private final String message;

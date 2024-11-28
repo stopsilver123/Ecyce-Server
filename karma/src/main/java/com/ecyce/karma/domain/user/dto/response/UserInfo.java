@@ -10,14 +10,29 @@ public record UserInfo(
         String nickname,
         String email ,
         String phoneNumber,
-        Long postalCode ,
+        String postalCode ,
         String address1,
         String address2
 
 ) {
 
    /* 주소는 처음 저장된 걸 불러옴 */
-    public static UserInfo from(User user) {
+    public static UserInfo from(User user , Address address) {
+
+        return new UserInfo(
+                user.getUserId(),
+                user.getName(),
+                user.getNickname(),
+                user.getEmail(),
+                user.getPhoneNumber(),
+                address.getPostalCode(),
+                address.getAddress1(),
+                address.getAddress2()
+        );
+    }
+
+    /* 주소는 처음 저장된 걸 불러옴 */
+    public static UserInfo of(User user) {
 
         return new UserInfo(
                 user.getUserId(),

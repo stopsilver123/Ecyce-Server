@@ -23,6 +23,7 @@ public enum ErrorCode {
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND , "해당하는 제품을 찾을 수 없습니다."),
     PRODUCT_OPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 옵션을 찾을 수 없습니다."),
     INVALID_ACCESS(HttpStatus.BAD_REQUEST , "해당 사용자는 제품 정보를 수정할 수 없습니다."),
+    INVALID_REQUEST(HttpStatus.BAD_REQUEST , "잘못된 요청입니다."),
 
     // bookmark
     BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "북마크가 존재하지 않습니다. 북마크를 등록한 후 취소할 수 있습니다."),
@@ -36,7 +37,7 @@ public enum ErrorCode {
 
     // review
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "리뷰가 존재하지 않습니다."),
-    REVIEW_ACCESS_DENIED(HttpStatus.FORBIDDEN, "리뷰는 해당 주문의 구매자만 작성할 수 있습니다."),
+    REVIEW_ACCESS_DENIED(HttpStatus.FORBIDDEN, "리뷰는 해당 주문의 구매자만 작성하거나 삭제할 수 있습니다."),
     INVALID_REVIEW_STATE(HttpStatus.BAD_REQUEST, "리뷰는 '구매확정' 상태인 경우에만 작성할 수 있습니다."),
     REVIEW_ALREADY_EXISTS(HttpStatus.CONFLICT, "해당 주문에 대해 이미 리뷰가 작성되었습니다."),
 

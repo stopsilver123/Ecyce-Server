@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,8 +56,8 @@ public class ProductService {
         Product product = ProductRequest.toEntity(user , dto);
         productRepository.save(product);
         // 옵션이 있다면
-        if (dto.getOption() != null) {
-            for (OptionRequest optionDto : dto.getOption()) {
+        if (dto.getOptions() != null) {
+            for (OptionRequest optionDto : dto.getOptions()) {
                 ProductOption productOption = optionDto.toEntity(product , optionDto);
                 productOptionRepository.save(productOption);
             }
@@ -167,5 +167,47 @@ public class ProductService {
         List<ProductSimpleResponse> productSimpleResponseList = getProductSimpleResponses(user, productList);
 
         return ResponseEntity.status(HttpStatus.OK).body(productSimpleResponseList);
+    }
+
+    /* 카테고리별 조회*/
+    public ResponseEntity<?> categorySort(User user, Long category) {
+
+        if(category.equals(1L)){ // 후기순
+            List<Product> sortedProducts = productRepository.findAllOrderByRatingDesc(); // 정렬된 결과 가져오기
+            // 로그인 여부에 따른 북마크 상태 포함
+            List<ProductSimpleResponse> productSimpleResponses = getProductSimpleResponses(user, sortedProducts);
+            return ResponseEntity.ok(productSimpleResponses);
+        }
+        else if(category.equals(2L)){ // 북마크 개수 순
+            List<Product> sortedProducts = productRepository.findAllOrderByBookmarkCountDesc();
+            // 로그인 여부에 따른 북마크 상태 포함
+            List<ProductSimpleResponse> productSimpleResponses = getProductSimpleResponses(user, sortedProducts);
+            return ResponseEntity.ok(productSimpleResponses);
+        }
+        else if(category.equals(3L)){ // 최근순
+           List<Product> sortedProducts = productRepository.findAllOrderByCreatedAtDesc();
+           List<ProductSimpleResponse> productSimpleResponse = getProductSimpleResponses(user , sortedProducts);
+           return ResponseEntity.ok(productSimpleResponse);
+        }
+        else throw  new CustomException(ErrorCode.INVALID_REQUEST);
+
+    }
+
+    /* 옵션 삭제 */
+    public void deleteOption(User user , Long productId , Long optionId) {
+        ProductOption productOption = productOptionRepository.findByProductIdAndOptionId(productId , optionId);
+        if(!user.getUserId().equals(productOption.getProduct().getUser().getUserId())){
+            throw new CustomException(ErrorCode.INVALID_ACCESS);
+        }
+        productOptionRepository.delete(productOption);
+    }
+
+    /* 옵션 추가 */
+    public ResponseEntity<OptionResponse> addOption(User user, Long productId, OptionRequest request) {
+           Product product = findProduct(productId);
+          ProductOption productOption = OptionRequest.toEntity(product ,request);
+          productOptionRepository.save(productOption);
+          OptionResponse response = OptionResponse.from(productOption);
+          return  ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

@@ -27,11 +27,11 @@ public class Review extends BaseTimeEntity {
     private Integer rating;
 
     @ManyToOne
-    @JoinColumn(name = "userId" ,updatable = false, nullable = false)
+    @JoinColumn(name = "userId", updatable = false, nullable = false)
     private User user;
 
     @OneToOne
-    @JoinColumn(name = "orderId" ,unique = true , updatable = false, nullable = false)
+    @JoinColumn(name = "orderId", unique = true, updatable = false, nullable = false)
     private Orders orders;
 
     @Builder

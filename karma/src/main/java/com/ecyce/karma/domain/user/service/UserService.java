@@ -8,7 +8,6 @@ import com.ecyce.karma.domain.product.entity.Product;
 import com.ecyce.karma.domain.product.repository.ProductRepository;
 import com.ecyce.karma.domain.review.entity.Review;
 import com.ecyce.karma.domain.review.repository.ReviewRepository;
-import com.ecyce.karma.domain.user.dto.request.ModifyAddressRequest;
 import com.ecyce.karma.domain.user.dto.request.ModifyInfoRequest;
 import com.ecyce.karma.domain.user.dto.request.UserInfoRequest;
 import com.ecyce.karma.domain.user.dto.response.AllUserInfo;
@@ -36,8 +35,6 @@ public class UserService {
     private final ProductRepository productRepository;
     private final OrdersRepository ordersRepository;
     private final ReviewRepository reviewRepository;
-    private final AddressRepository addressRepository;
-//    private final UserMapper userMapper;
 
     /* 작가 정보 반환 */
     public ArtistInfoResponse getArtistInfo(Long userId) {
@@ -86,7 +83,7 @@ public class UserService {
         user.updateNewUserInfo(user , dto);
         userRepository.save(user);
         User updateUser = userRepository.findByUserId(user.getUserId());
-        return UserInfo.from(updateUser);
+        return UserInfo.from(updateUser , updateAddress);
     }
 
     /* 사용자 정보 수정 */

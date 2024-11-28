@@ -26,14 +26,14 @@ public class Address{
     private String address2; // 건물
 
     @Column(nullable = false)
-    private Long postalCode; // 우편번호
+    private String postalCode; // 우편번호
 
     @OneToOne
     @JoinColumn(name = "userId" ,updatable = false, nullable = false)
     private User user;
 
     @Builder
-    public Address(User user , String address1 , String address2 , Long postalCode){
+    public Address(User user , String address1 , String address2 , String postalCode){
         this.user = user;
         this.address1 = address1;
         this.address2 = address2;

@@ -4,15 +4,12 @@ import com.ecyce.karma.domain.pay.entity.Pay;
 import com.ecyce.karma.domain.pay.entity.PayStatus;
 import com.ecyce.karma.domain.product.entity.Product;
 import com.ecyce.karma.domain.product.entity.ProductOption;
-import com.ecyce.karma.domain.review.entity.Review;
 import com.ecyce.karma.domain.user.entity.User;
 import com.ecyce.karma.global.entity.BaseTimeEntity;
 import com.ecyce.karma.global.exception.CustomException;
 import com.ecyce.karma.global.exception.ErrorCode;
 import jakarta.persistence.*;
-import jdk.jshell.Snippet.Status;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -39,6 +36,9 @@ public class Orders extends BaseTimeEntity {
     private Integer orderCount;
 
     @Column
+    private String deliveryCompany; // 택배회사
+
+    @Column
     private String invoiceNumber; // 송장번호
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -55,9 +55,6 @@ public class Orders extends BaseTimeEntity {
 
     @OneToOne(mappedBy = "orders" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Pay pay;
-
-    @OneToOne(mappedBy = "orders" , cascade = CascadeType.ALL, orphanRemoval = true)
-    private Review review;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productOptionId", nullable = false)
@@ -110,13 +107,14 @@ public class Orders extends BaseTimeEntity {
     }
 
     // 4. 배송 시작 (송장번호 추가)
-    public void startShipping(String invoiceNumber) {
+    public void startShipping(String deliveryCompany, String invoiceNumber) {
         if (orderState != OrderState.제작완료) {
             throw new CustomException(ErrorCode.INVALID_ORDER_STATE, String.format("현재 상태는 '%s'이며, 제작 완료 상태에서만 배송을 시작할 수 있습니다.", orderState));
         }
         if (invoiceNumber == null || invoiceNumber.isBlank()) {
             throw new CustomException(ErrorCode.INVOICE_NUMBER_REQUIRED);
         }
+        this.deliveryCompany = deliveryCompany;
         this.invoiceNumber = invoiceNumber;
         this.orderState = OrderState.배송중;
     }

@@ -88,6 +88,18 @@ public class ReviewService {
                 .map(ReviewDetailDto::from)
                 .collect(Collectors.toList());
     }
+  
+    /* 리뷰 삭제 */
+    public void delete(User user, Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_FOUND));
+
+        if (!review.getUser().equals(user)) {
+            throw new CustomException(ErrorCode.REVIEW_ACCESS_DENIED);
+        }
+
+        reviewRepository.delete(review);
+    }
 
     /* 작가 작품의 리뷰 리스트 조회 */
     public List<ReviewResponseDto> getReviewListByArtist(User user) {
@@ -107,6 +119,5 @@ public class ReviewService {
                 .collect(Collectors.toList());
 
         return reviewResponseDtoList;
-
     }
 }

@@ -114,13 +114,13 @@ public class OrdersService {
     }
 
     // 배송 시작
-    public void startShipping(Long orderId, User seller, String invoiceNumber) {
+    public void startShipping(Long orderId, User seller, String deliveryCompany,String invoiceNumber) {
         Orders order = orderRepository.findByOrderId(orderId)
                                        .orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
         if (!order.getSellerUser().equals(seller)) {
             throw new CustomException(ErrorCode.ORDER_ACCESS_DENIED);
         }
-        order.startShipping(invoiceNumber);
+        order.startShipping(deliveryCompany,invoiceNumber);
     }
 
     // 구매 확정

@@ -4,7 +4,7 @@ public record UserInfoRequest(
         String name,
         String nickname,
         String phoneNumber,
-        Long postalCode ,
+        String postalCode ,
         String address1,
         String address2
 ) {

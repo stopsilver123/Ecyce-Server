@@ -58,14 +58,14 @@ public class Address{
 
     /* 주소 중 원하는 부분만 update */
     public void updateAddress(ModifyAddressRequest request){
-        if(request.postalCode()!= null && request.postalCode().isPresent()){
-            this.postalCode = request.postalCode().get();
+        if(request.getPostalCode()!= null && request.getPostalCode().isPresent()){
+            this.postalCode = request.getPostalCode().get();
         }
-        if(request.address1()!= null && request.address1().isPresent()){
-            this.address1 = request.address1().get();
+        if(request.getAddress1()!= null && request.getAddress1().isPresent()){
+            this.address1 = request.getAddress1().get();
         }
-        if(request.address2()!= null && request.address2().isPresent()){
-            this.address2 = request.address2().get();
+        if(request.getAddress2()!= null && request.getAddress2().isPresent()){
+            this.address2 = request.getAddress2().get();
         }
     }
 

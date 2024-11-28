@@ -8,6 +8,7 @@ import com.ecyce.karma.domain.product.entity.Product;
 import com.ecyce.karma.domain.product.repository.ProductRepository;
 import com.ecyce.karma.domain.review.entity.Review;
 import com.ecyce.karma.domain.review.repository.ReviewRepository;
+import com.ecyce.karma.domain.user.dto.request.ModifyAddressRequest;
 import com.ecyce.karma.domain.user.dto.request.ModifyInfoRequest;
 import com.ecyce.karma.domain.user.dto.request.UserInfoRequest;
 import com.ecyce.karma.domain.user.dto.response.AllUserInfo;
@@ -35,6 +36,7 @@ public class UserService {
     private final ProductRepository productRepository;
     private final OrdersRepository ordersRepository;
     private final ReviewRepository reviewRepository;
+    private final AddressRepository addressRepository;
 
     /* 작가 정보 반환 */
     public ArtistInfoResponse getArtistInfo(Long userId) {
@@ -71,7 +73,7 @@ public class UserService {
 
     /* 사용자 정보 조회 */
     public UserInfo getUserInfo(User user) {
-        return UserInfo.from(user);
+        return UserInfo.of(user);
     }
 
 
@@ -98,19 +100,6 @@ public class UserService {
         return AllUserInfo.from(updateUser);
     }
 
-//    public AllUserInfo modifyUserInfo(User user, ModifyInfoRequest request) {
-//        // 데이터베이스에서 기존 사용자 정보 조회
-//        User targetUser = userRepository.findByUserId(user.getUserId());
-//
-//        // MapStruct를 사용해 요청 값을 기존 사용자 객체에 업데이트
-//        userMapper.update(request, targetUser);
-//
-//        // 업데이트된 사용자 정보 저장
-//        userRepository.save(targetUser);
-//
-//        // 갱신된 사용자 정보를 반환
-//        return AllUserInfo.from(targetUser);
-//    }
 
     /* 사용자 주소 수정 */
     public UserInfo modifyAddress(User user, ModifyAddressRequest request) {
@@ -120,7 +109,7 @@ public class UserService {
 
       address.updateAddress(request);
 
-      UserInfo userInfo = UserInfo.from(user);
+      UserInfo userInfo = UserInfo.of(user);
       return userInfo;  // 이것도 기존값 넣어줘여겠다
     }
 }

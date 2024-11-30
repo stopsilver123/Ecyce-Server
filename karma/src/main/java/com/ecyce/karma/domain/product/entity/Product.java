@@ -41,7 +41,7 @@ public class Product extends BaseTimeEntity {
     private int duration;
 
     @Column
-    private Integer rating;  // 점수는 아무도 리뷰를 쓰지 않은 경우 , 없을 수 있음
+    private double rating;  // 점수는 아무도 리뷰를 쓰지 않은 경우 , 없을 수 있음
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -74,7 +74,7 @@ public class Product extends BaseTimeEntity {
 
 
     @Builder
-    public Product(User user , String productName , int price , String content , int duration , int rating , ProductState productState,
+    public Product(User user , String productName , int price , String content , int duration , double rating , ProductState productState,
     Integer deliveryFee , String materialInfo, String materialExample ,String buyerNotice){
         this.user = user;
         this.productName = productName;
@@ -123,5 +123,8 @@ public class Product extends BaseTimeEntity {
     /* 상품 소재 정보 저장 */
     public void updateMaterialExample(String url){
         this.materialExample = url;
+    }
+    public void updateRating(double rating){
+        this.rating = rating;
     }
 }

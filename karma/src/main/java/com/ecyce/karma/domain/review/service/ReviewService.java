@@ -32,15 +32,14 @@ public class ReviewService {
     public ReviewResponseDto create(User user, ReviewRequestDto requestDto) {
         Orders order = ordersRepository.findByOrderId(requestDto.getOrderId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
-
         // 리뷰 작성 가능 여부 검증
         validateReviewPermissions(user, order);
-
         Review review = Review.createReview(requestDto.getContent(), requestDto.getRating(), user, order);
         reviewRepository.save(review);
+        // 상품 별점 업데이트
+        updateProductRating(order.getProduct().getProductId());
         return ReviewResponseDto.from(review);
     }
-
 
     /* 리뷰 작성 가능 여부 검증 */
     private void validateReviewPermissions(User user, Orders order) {
@@ -58,6 +57,16 @@ public class ReviewService {
         if (reviewRepository.existsByOrderId(order.getOrderId())) {
             throw new CustomException(ErrorCode.REVIEW_ALREADY_EXISTS);
         }
+    }
+
+    /* 상품 별점 업데이트 */
+    private void updateProductRating(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(()-> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        List<Review> reviews = reviewRepository.findByOrders_Product_ProductId(productId);
+
+        double averageRating = reviews.stream().mapToInt(Review::getRating).average().orElse(0.0);
+        product.updateRating(averageRating);
     }
 
     public ReviewDetailDto getReviewById(Long reviewId) {
@@ -99,6 +108,9 @@ public class ReviewService {
         }
 
         reviewRepository.delete(review);
+
+        Long productId = review.getOrders().getProduct().getProductId();
+        updateProductRating(productId);
     }
 
     /* 작가 작품의 리뷰 리스트 조회 */
